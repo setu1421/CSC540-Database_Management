@@ -1,0 +1,114 @@
+import java.sql.*;
+import java.util.*;
+
+/**
+ * @author Setu Kumar Basak (sbasak4)
+ */
+
+public class Home {
+
+    public static final String jdbcURL = "jdbc:oracle:thin:@ora.csc.ncsu.edu:1521:orcl01";
+    public static final String user = "sbasak4";
+    public static final String passwd = "abcd1234";
+
+    public static Connection connection = null;
+    public static Statement statement = null;
+
+    public static void main(String[] args) {
+        try {
+
+            // Load the driver. This creates an instance of the driver
+            // and calls the registerDriver method to make Oracle Thin
+            // driver available to clients.
+
+            //Class.forName("oracle.jdbc.OracleDriver");
+
+            try {
+
+                // Get a connection from the first driver in the
+                // DriverManager list that recognizes the URL jdbcURL
+
+                //connection = DriverManager.getConnection(jdbcURL, user, passwd);
+
+                System.out.println("\t\tWelcome to MarketPlace Loyalty Program\n\n");
+                showMenu();
+
+
+            } catch (Exception e) {
+                //System.out.println(("Caught SQLException " + e.getErrorCode() + "/" + e.getSQLState() + " " + e.getMessage()));
+            } finally {
+                exitProgram();
+            }
+        } catch (Throwable oops) {
+            oops.printStackTrace();
+        }
+    }
+
+    public static void showMenu() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Choose what operation you want to perform");
+        System.out.println("1. Login");
+        System.out.println("2. Sign Up");
+        System.out.println("3. Show Queries");
+        System.out.println("4. Exit");
+        System.out.print("Enter your options:");
+
+        int selection = 0;
+        do {
+            selection = sc.nextInt();
+
+            switch (selection) {
+                case 1:
+                    //Todo: Check for login
+                    break;
+                case 2:
+                    //Todo: Check for signup
+                    break;
+                case 3:
+                    //Todo: Show Queries
+                    break;
+                case 4:
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("You have entered a wrong option");
+                    showMenu();
+            }
+        } while (selection != 4);
+    }
+
+    public static void exitProgram() {
+        close(connection);
+        close(statement);
+    }
+
+    static void close(Connection conn) {
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (Throwable whatever) {
+            }
+        }
+    }
+
+    static void close(Statement st) {
+        if (st != null) {
+            try {
+                st.close();
+            } catch (Throwable whatever) {
+            }
+        }
+    }
+
+    static void close(ResultSet rs) {
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (Throwable whatever) {
+            }
+        }
+    }
+}
+
+
+
