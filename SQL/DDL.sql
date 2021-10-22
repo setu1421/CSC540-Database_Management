@@ -2,5 +2,5 @@ CREATE TABLE USERS(
     USERID VARCHAR2(10),  
     PASSWORD VARCHAR2(30) NOT NULL,  
     USERTYPE CHAR(1) NOT NULL,
-    CONSTRAINT pk_users primary key(USERID),  
+    CONSTRAINT pk_users primary key(USERID)  
 );

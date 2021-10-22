@@ -1,0 +1,2 @@
+-- INSERT data into USERS table
+INSERT INTO USERS(USERID, PASSWORD, USERTYPE) VALUES('admin', 'admin', 'A');
