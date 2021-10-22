@@ -2,6 +2,10 @@ import java.sql.*;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+/**
+ * @author Setu Kumar Basak (sbasak4)
+ */
+
 public class Login {
     public static String userType = "";
 
@@ -11,11 +15,11 @@ public class Login {
 
         do {
             System.out.print("Enter your userid:");
-            String userid = sc.next();
+            String userid = sc.nextLine();
             System.out.print("Enter your password:");
-            String password = sc.next();
+            String password = sc.nextLine();
 
-            int selection = chooseSignInMenu(sc);
+            int selection = Utility.chooseAddMenu(sc, "Sign in");
 
             if (selection == 1) {
                 loginSuccessful = checkUserIdAndPassword(userid, password);
@@ -23,34 +27,25 @@ public class Login {
                 Home.showMenu();
             }
 
+            sc.nextLine();
         } while (!loginSuccessful);
 
         if (userType.equals("A")) {
-            System.out.println("Your are a admin.");
+            Admin.adminUI();
+        } else if(userType.equals("B"))
+        {
+            //TODO: go to Brand dashboard
+        } else
+        {
+            //TODO: go to Customer dashboard
         }
 
-    }
-
-    private static int chooseSignInMenu(Scanner sc) {
-        System.out.println("Choose what operation you want to perform");
-        System.out.println("1. Sign in");
-        System.out.println("2. Go Back");
-        System.out.print("Enter your options:");
-
-        int selection = sc.nextInt();
-
-        if (selection != 1 && selection != 2) {
-            System.out.println("You have entered a wrong option. Please choose again.");
-            chooseSignInMenu(sc);
-        }
-
-        return selection;
     }
 
     private static boolean checkUserIdAndPassword(String userid, String password) {
         boolean loginSuccessful = false;
 
-        String sqlCred = "select usertype from users where userid=  '" + userid
+        String sqlCred = "select usertype from users where userid =  '" + userid
                 + "' and password='" + password + "'";
 
         ResultSet rs = null;
@@ -64,7 +59,7 @@ public class Login {
             }
             rs.close();
         } catch (SQLException e) {
-            Home.close(rs);
+            Utility.close(rs);
             e.printStackTrace();
         }
 

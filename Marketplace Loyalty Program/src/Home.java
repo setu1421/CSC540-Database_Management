@@ -50,7 +50,7 @@ public class Home {
     public static void showMenu() {
         Scanner sc = new Scanner(System.in);
 
-        int selection = 0;
+        int selection;
 
         do {
             System.out.println("Choose what operation you want to perform");
@@ -82,36 +82,9 @@ public class Home {
     }
 
     public static void exitProgram() {
-        close(connection);
-        close(statement);
+        Utility.close(connection);
+        Utility.close(statement);
         System.exit((0));
-    }
-
-    static void close(Connection conn) {
-        if (conn != null) {
-            try {
-                conn.close();
-            } catch (Throwable whatever) {
-            }
-        }
-    }
-
-    static void close(Statement st) {
-        if (st != null) {
-            try {
-                st.close();
-            } catch (Throwable whatever) {
-            }
-        }
-    }
-
-    static void close(ResultSet rs) {
-        if (rs != null) {
-            try {
-                rs.close();
-            } catch (Throwable whatever) {
-            }
-        }
     }
 }
 
