@@ -21,9 +21,9 @@ INSERT INTO CUSTOMER VALUES('nickmike', 'Nick', 'Mike', '9841232233', '1905 Aven
 
 
 -- Insert into brand table
-INSERT INTO BRANDS VALUES ('uber', 'Uber Technologies, Inc.', 'San Francisco, CA', '01-JAN-2021');
-INSERT INTO BRANDS VALUES ('foodlion', 'Foodlion, Inc.', 'San Francisco, CA', '01-JAN-2021');
---select * from brands;
+INSERT INTO BRAND VALUES ('uber', 'Uber Technologies, Inc.', 'San Francisco, CA', '01-JAN-2021');
+INSERT INTO BRAND VALUES ('foodlion', 'Foodlion, Inc.', 'San Francisco, CA', '01-JAN-2021');
+--select * from brand;
 
 -- Insert into activity type
 INSERT INTO ACTIVITY_TYPE VALUES ('ACND12', 'Refer a friend');
@@ -37,12 +37,12 @@ INSERT INTO REWARD_TYPE VALUES ('HDFE91', 'Free Product');
 
 
 -- Insert into rr rules
-INSERT INTO RRRULES VALUES ('DGJD98', '1', '100', 'BDJD43');
-INSERT INTO RRRULES VALUES ('D23D98', '1', '500', 'HDFE91');
---select* from rrrules;
+INSERT INTO RRRULE VALUES ('DGJD98', '1', '100', 'BDJD43');
+INSERT INTO RRRULE VALUES ('D23D98', '1', '500', 'HDFE91');
+--select* from rrrule;
 
 
 -- Insert into RE rules
-INSERT INTO RERULES VALUES ('DFNJ87', 1, 50, 'ACND12');
-INSERT INTO RERULES VALUES ('D2NJ87', 1, 50, 'ACND14');
---select* from rerules;
+INSERT INTO RERULE VALUES ('DFNJ87', 1, 50, 'ACND12');
+INSERT INTO RERULE VALUES ('D2NJ87', 1, 50, 'ACND14');
+--select* from rerule;
