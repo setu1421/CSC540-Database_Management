@@ -5,39 +5,44 @@ INSERT INTO USERS(USERID, PASSWORD, USERTYPE) VALUES('mikegeller', '1234', 'C');
 INSERT INTO USERS(USERID, PASSWORD, USERTYPE) VALUES('nickmike', '1234', 'C');
 INSERT INTO USERS(USERID, PASSWORD, USERTYPE) VALUES('uber', 'uberEAT', 'B');
 INSERT INTO USERS(USERID, PASSWORD, USERTYPE) VALUES('foodlion', 'LionFood', 'B');
+--select * from users;
 
--- Insert into admin table 
-INSERT INTO ADMIN  VALUES('0001', 'Bob', 'Richard', '9876243233', null, '1901 Gromarn St, Raleigh, NC', 'admin');
+-- Insert into admin table
+-- admin table not necessaty
+--INSERT INTO ADMIN  VALUES('0001', 'Bob', 'Richard', '9876243233', null, '1901 Gromarn St, Raleigh, NC', 'admin');
 
 -- Insert into customer table
-INSERT INTO CUSTOMER VALUES('1234', 'Rick', 'Geller', '9841243233', null, '1901 Gromarn St, Raleigh, NC', 'rickgeller');
-INSERT INTO CUSTOMER VALUES('9087', 'Mike', 'Geller', '9812243661', null, '1901 Gromarn St, Raleigh, NC', 'mikegeller');
-INSERT INTO CUSTOMER VALUES('1237', 'Nick', 'Mike', '9841232233', null, '1905 Avent Ferry, Raleigh, NC', 'nickmike');
+INSERT INTO CUSTOMER VALUES('rickgeller', 'Rick', 'Geller', '9841243233', '1901 Gromarn St, Raleigh, NC');
+INSERT INTO CUSTOMER VALUES('mikegeller', 'Mike', 'Geller', '9812243661', '1901 Gromarn St, Raleigh, NC');
+INSERT INTO CUSTOMER VALUES('nickmike', 'Nick', 'Mike', '9841232233', '1905 Avent Ferry, Raleigh, NC');
+
+--select * from customer;
+
+
 
 -- Insert into brand table
-INSERT INTO BRANDS VALUES ('5498', 'Uber Technologies, Inc.', 'San Francisco, CA', '01-JAN-2021', 'uber');
-INSERT INTO BRANDS VALUES ('9900', 'Foodlion, Inc.', 'San Francisco, CA', '01-JAN-2021', 'foodlion');
+INSERT INTO BRANDS VALUES ('uber', 'Uber Technologies, Inc.', 'San Francisco, CA', '01-JAN-2021');
+INSERT INTO BRANDS VALUES ('foodlion', 'Foodlion, Inc.', 'San Francisco, CA', '01-JAN-2021');
+--select * from brands;
 
 -- Insert into activity type
 INSERT INTO ACTIVITY_TYPE VALUES ('ACND12', 'Refer a friend');
 INSERT INTO ACTIVITY_TYPE VALUES ('ACND14', 'Purchase a product');
+--select * from ACTIVITY_TYPE;
 
 -- Insert into reward type
 INSERT INTO REWARD_TYPE VALUES ('BDJD43', 'Gift Card');
 INSERT INTO REWARD_TYPE VALUES ('HDFE91', 'Free Product');
-
--- Insert into rr rules 
-INSERT INTO RRRULES VALUES ('DGJD98', '1', '100', 'BDJD43'); 
-INSERT INTO RRRULES VALUES ('D23D98', '1', '500', 'HDFE91'); 
+--select * from REWARD_TYPE;
 
 
--- Insert into RE rules 
+-- Insert into rr rules
+INSERT INTO RRRULES VALUES ('DGJD98', '1', '100', 'BDJD43');
+INSERT INTO RRRULES VALUES ('D23D98', '1', '500', 'HDFE91');
+--select* from rrrules;
+
+
+-- Insert into RE rules
 INSERT INTO RERULES VALUES ('DFNJ87', 1, 50, 'ACND12');
 INSERT INTO RERULES VALUES ('D2NJ87', 1, 50, 'ACND14');
-
-
-
-
-
-select * from users;
-select * from brands;
+--select* from rerules;
