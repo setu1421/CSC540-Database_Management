@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 
 /**
@@ -75,19 +76,21 @@ public class Admin {
                 adminUI();
             } else {
                 try {
-                    String sqlBrandSelect = "select * from customer where customerid =  " + customerUserId;
+                    String sqlBrandSelect = "select * from customer where customerid = '" + customerUserId + "'";
 
                     ResultSet rs = Home.statement.executeQuery(sqlBrandSelect);
 
                     if (rs.next()) {
-                        String customerName = rs.getString("name");
-                        String customerAddress = rs.getString("address");
-                        String customerPhone = rs.getString("phone");
+                        String customerFName = rs.getString("FNAME");
+                        String customerLName = rs.getString("LNAME");
+                        String customerAddress = rs.getString("ADDRESS");
+                        String customerPhone = rs.getString("PHONENUMBER");
 
                         System.out.println("Customer UserId: " + customerUserId);
-                        System.out.println("Customer Name: " + customerName);
-                        System.out.println("Customer Address: " + customerAddress);
+                        System.out.println("Customer First Name: " + customerFName);
+                        System.out.println("Customer Last Name: " + customerLName);
                         System.out.println("Customer Phone: " + customerPhone);
+                        System.out.println("Customer Address: " + customerAddress);
                     } else {
                         System.out.println("Customer can not be found. Please try again.");
                     }
@@ -115,17 +118,19 @@ public class Admin {
                 adminUI();
             } else {
                 try {
-                    String sqlBrandSelect = "select * from brand where brandid =  " + brandUserId;
+                    String sqlBrandSelect = "select * from brand where bid = '" + brandUserId + "'";
 
                     ResultSet rs = Home.statement.executeQuery(sqlBrandSelect);
 
                     if (rs.next()) {
-                        String brandName = rs.getString("name");
-                        String brandAddress = rs.getString("address");
+                        String brandName = rs.getString("BNAME");
+                        String brandAddress = rs.getString("ADDRESS");
+                        Date brandJoinDate = rs.getDate("JOINDATE");
 
                         System.out.println("Brand UserId: " + brandUserId);
                         System.out.println("Brand Name: " + brandName);
                         System.out.println("Brand Address: " + brandAddress);
+                        System.out.println("Brand Join Date: " + brandJoinDate);
                     } else {
                         System.out.println("Brand can not be found. Please try again.");
                     }
