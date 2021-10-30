@@ -1,7 +1,5 @@
-import javax.swing.plaf.nimbus.State;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
@@ -41,17 +39,28 @@ public class Utility {
     }
 
     public static int chooseAddMenu(Scanner sc, String menuText) {
-        System.out.println("Choose what operation you want to perform");
-        System.out.println("1. " + menuText);
-        System.out.println("2. Go Back");
-        System.out.print("Enter your options:");
+        boolean flag = false;
+        int selection = 2;
 
-        int selection = sc.nextInt();
+        do{
+            System.out.println("Choose what operation you want to perform");
+            System.out.println("1. " + menuText);
+            System.out.println("2. Go Back");
+            System.out.print("Enter your options:");
 
-        if (selection != 1 && selection != 2) {
-            System.out.println("You have entered a wrong option. Please choose again.");
-            chooseAddMenu(sc, menuText);
-        }
+            try {
+                selection = sc.nextInt();
+                if (selection != 1 && selection != 2) {
+                    System.out.println("You have entered a wrong option. Please choose again.");
+                } else
+                {
+                    flag = true;
+                }
+            } catch (Exception e) {
+                System.out.println("Please choose between 1 and 2. Please choose again.");
+                sc.next();
+            }
+        } while(!flag);
 
         return selection;
     }

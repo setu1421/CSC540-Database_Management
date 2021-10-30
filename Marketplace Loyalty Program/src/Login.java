@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.sql.SQLException;
+import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -30,9 +31,9 @@ public class Login {
             sc.nextLine();
         } while (!loginSuccessful);
 
-        if (userType.equals("A")) {
+        if (userType.equalsIgnoreCase("A")) {
             Admin.adminUI();
-        } else if(userType.equals("B"))
+        } else if(userType.equalsIgnoreCase("B"))
         {
             //TODO: go to Brand dashboard
         } else
@@ -55,7 +56,7 @@ public class Login {
                 userType = rs.getString("USERTYPE");
                 loginSuccessful = true;
             } else {
-                System.out.println("Wrong userid and password. Please try again.");
+                System.out.println("Login credentials are incorrect. Please try again.");
             }
             rs.close();
         } catch (SQLException e) {

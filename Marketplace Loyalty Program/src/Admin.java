@@ -9,6 +9,7 @@ public class Admin {
     public static void adminUI() {
         Scanner sc = new Scanner(System.in);
         int selection;
+        boolean flag = false;
 
         do {
             System.out.println("Choose what operation you want to perform");
@@ -21,35 +22,42 @@ public class Admin {
             System.out.println("7. Logout");
             System.out.print("Enter your option:");
 
-            selection = sc.nextInt();
+            try {
+                selection = sc.nextInt();
+                flag = true;
 
-            switch (selection) {
-                case 1:
-                    addBrand();
-                    break;
-                case 2:
-                    addCustomer();
-                    break;
-                case 3:
-                    showBrandInfo();
-                    break;
-                case 4:
-                    showCustomerInfo();
-                    break;
-                case 5:
-                    addActivityType();
-                    break;
-                case 6:
-                    addRewardType();
-                    break;
-                case 7:
-                    adminLogout();
-                    break;
-                default:
-                    System.out.println("You have entered a wrong option. Please choose again.");
+                switch (selection) {
+                    case 1:
+                        addBrand();
+                        break;
+                    case 2:
+                        addCustomer();
+                        break;
+                    case 3:
+                        showBrandInfo();
+                        break;
+                    case 4:
+                        showCustomerInfo();
+                        break;
+                    case 5:
+                        addActivityType();
+                        break;
+                    case 6:
+                        addRewardType();
+                        break;
+                    case 7:
+                        adminLogout();
+                        break;
+                    default:
+                        System.out.println("You have entered a wrong option. Please choose again.");
+                        flag = false;
+                }
+
+            } catch (Exception e) {
+                System.out.println("Please choose between 1 and 7. Please choose again.");
+                sc.next();
             }
-        } while (selection < 1 || selection > 7);
-
+        } while (!flag);
     }
 
     public static void showCustomerInfo() {
@@ -147,16 +155,19 @@ public class Admin {
             adminUI();
         } else {
             try {
-                PreparedStatement ps = Home.connection.prepareStatement("Insert into brand (brandid, name, address) values (?,?,?)");
-                ps.setString(1, brandUserId);
-                ps.setString(2, brandName);
-                ps.setString(3, brandAddress);
+                CallableStatement statement = Home.connection.prepareCall("{call admin_add_brand(?, ?, ?, ?)}");
+                statement.setString(1, brandUserId);
+                statement.setString(2, brandName);
+                statement.setString(3, brandAddress);
+                statement.registerOutParameter(4, Types.INTEGER);
 
-                int rows = ps.executeUpdate();
-                if (rows > 0) {
-                    System.out.println("Brand has been added successfully.");
-                } else {
+                statement.execute();
+                int ret = statement.getInt(4);
+
+                if (ret == 0) {
                     System.out.println("Brand can not be added. Please try again.");
+                } else {
+                    System.out.println("Brand has been added successfully.");
                 }
 
                 adminUI();

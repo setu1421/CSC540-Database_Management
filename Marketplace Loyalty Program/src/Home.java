@@ -50,7 +50,7 @@ public class Home {
     public static void showMenu() {
         Scanner sc = new Scanner(System.in);
 
-        int selection;
+        int selection = 1;
 
         do {
             System.out.println("Choose what operation you want to perform");
@@ -60,23 +60,28 @@ public class Home {
             System.out.println("4. Exit");
             System.out.print("Enter your option:");
 
-            selection = sc.nextInt();
+            try {
+                selection = sc.nextInt();
 
-            switch (selection) {
-                case 1:
-                    Login.loginUI();
-                    break;
-                case 2:
-                    //Todo: Check for signup
-                    break;
-                case 3:
-                    //Todo: Show Queries
-                    break;
-                case 4:
-                    exitProgram();
-                    break;
-                default:
-                    System.out.println("You have entered a wrong option. Please choose again.");
+                switch (selection) {
+                    case 1:
+                        Login.loginUI();
+                        break;
+                    case 2:
+                        //Todo: Check for signup
+                        break;
+                    case 3:
+                        //Todo: Show Queries
+                        break;
+                    case 4:
+                        exitProgram();
+                        break;
+                    default:
+                        System.out.println("You have entered a wrong option. Please choose again.");
+                }
+            } catch (Exception e) {
+                System.out.println("You have entered a wrong option. Please choose again.");
+                showMenu();
             }
         } while (selection != 4);
     }

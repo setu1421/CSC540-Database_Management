@@ -46,3 +46,35 @@ INSERT INTO RRRULE VALUES ('D23D98', '1', '500', 'HDFE91');
 INSERT INTO RERULE VALUES ('DFNJ87', 1, 50, 'ACND12');
 INSERT INTO RERULE VALUES ('D2NJ87', 1, 50, 'ACND14');
 --select* from rerule;
+
+
+
+
+-----------------------------------Stored Procedures-----------------------------------------------
+
+-- Adding a brand into marketplace
+create or replace PROCEDURE admin_add_brand
+(
+    brandId IN VARCHAR2,
+    brandName IN VARCHAR2,
+    brandAddress IN VARCHAR2,
+    ret OUT INT
+) 
+AS
+OLDUSERIDCNT INT;
+JOIN_DATE DATE;
+BEGIN
+    SELECT COUNT(USERID) INTO OLDUSERIDCNT FROM USERS WHERE USERID = brandId;
+
+    IF OLDUSERIDCNT > 0 THEN
+        ret := 0;
+    ELSE
+        SELECT CURRENT_DATE INTO JOIN_DATE FROM DUAL;
+        -- Insert into users table
+        INSERT INTO USERS(USERID, PASSWORD, USERTYPE) VALUES(brandId, '1234', 'B');
+        -- Insert into brand table
+        INSERT INTO BRAND(BID, BNAME, ADDRESS, JOINDATE) VALUES(brandId, brandName, brandAddress, JOIN_DATE);
+
+        ret := 1;
+    END IF;    
+END;
