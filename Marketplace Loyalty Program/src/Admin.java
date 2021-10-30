@@ -179,13 +179,15 @@ public class Admin {
     }
 
     public static void addCustomer() {
-        String customerUserId, customerName, customerAddress, customerPhone;
+        String customerUserId, customerFName, customerLName, customerAddress, customerPhone;
 
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter customer userid:");
         customerUserId = sc.nextLine();
-        System.out.print("Enter customer name:");
-        customerName = sc.nextLine();
+        System.out.print("Enter customer first name:");
+        customerFName = sc.nextLine();
+        System.out.print("Enter customer last name:");
+        customerLName = sc.nextLine();
         System.out.print("Enter customer address:");
         customerAddress = sc.nextLine();
         System.out.print("Enter customer phone:");
@@ -197,17 +199,21 @@ public class Admin {
             adminUI();
         } else {
             try {
-                PreparedStatement ps = Home.connection.prepareStatement("Insert into customer (customerid, name, address, phone) values (?,?,?)");
-                ps.setString(1, customerUserId);
-                ps.setString(2, customerName);
-                ps.setString(3, customerAddress);
-                ps.setString(3, customerPhone);
+                CallableStatement statement = Home.connection.prepareCall("{call admin_add_customer(?, ?, ?, ?, ?, ?)}");
+                statement.setString(1, customerUserId);
+                statement.setString(2, customerFName);
+                statement.setString(3, customerLName);
+                statement.setString(4, customerAddress);
+                statement.setString(5, customerPhone);
+                statement.registerOutParameter(6, Types.INTEGER);
 
-                int rows = ps.executeUpdate();
-                if (rows > 0) {
-                    System.out.println("Customer has been added successfully.");
-                } else {
+                statement.execute();
+
+                int ret = statement.getInt(6);
+                if (ret == 0) {
                     System.out.println("Customer can not be added. Please try again.");
+                } else {
+                    System.out.println("Customer has been added successfully.");
                 }
 
                 adminUI();

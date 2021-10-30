@@ -52,7 +52,7 @@ INSERT INTO RERULE VALUES ('D2NJ87', 1, 50, 'ACND14');
 
 -----------------------------------Stored Procedures-----------------------------------------------
 
--- Adding a brand into marketplace
+-- Adding a brand into marketplace by admin
 create or replace PROCEDURE admin_add_brand
 (
     brandId IN VARCHAR2,
@@ -74,6 +74,32 @@ BEGIN
         INSERT INTO USERS(USERID, PASSWORD, USERTYPE) VALUES(brandId, '1234', 'B');
         -- Insert into brand table
         INSERT INTO BRAND(BID, BNAME, ADDRESS, JOINDATE) VALUES(brandId, brandName, brandAddress, JOIN_DATE);
+
+        ret := 1;
+    END IF;    
+END;
+
+-- Adding a customer into marketplace by admin
+CREATE or REPLACE PROCEDURE admin_add_customer
+(
+    customerId IN VARCHAR2,
+    customerFName IN VARCHAR2,
+    customerLName IN VARCHAR2,
+    customerPhoneNumber IN VARCHAR2,
+    customerAddress IN VARCHAR2, 
+    ret OUT INT
+) 
+AS
+OLDUSERIDCNT INT;
+BEGIN
+    SELECT COUNT(USERID) INTO OLDUSERIDCNT FROM USERS WHERE USERID = customerId;
+    IF OLDUSERIDCNT > 0 THEN
+        ret := 0;
+    ELSE
+        -- Insert into users table
+        INSERT INTO USERS(USERID, PASSWORD, USERTYPE) VALUES(customerId, '1234', 'C');
+        -- Insert into customer table
+        INSERT INTO CUSTOMER(CUSTOMERID, FNAME, LNAME, PHONENUMBER, ADDRESS) VALUES(customerId, customerFName, customerLName, customerPhoneNumber, customerAddress);
 
         ret := 1;
     END IF;    
