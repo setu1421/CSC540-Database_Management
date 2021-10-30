@@ -26,14 +26,14 @@ INSERT INTO BRAND VALUES ('foodlion', 'Foodlion, Inc.', 'San Francisco, CA', '01
 --select * from brand;
 
 -- Insert into activity type
-INSERT INTO ACTIVITY_TYPE VALUES ('ACND12', 'Refer a friend');
-INSERT INTO ACTIVITY_TYPE VALUES ('ACND14', 'Purchase a product');
---select * from ACTIVITY_TYPE;
+INSERT INTO ACTIVITYTYPE VALUES ('ACND12', 'Refer a friend');
+INSERT INTO ACTIVITYTYPE VALUES ('ACND14', 'Purchase a product');
+--select * from ACTIVITYTYPE;
 
 -- Insert into reward type
-INSERT INTO REWARD_TYPE VALUES ('BDJD43', 'Gift Card');
-INSERT INTO REWARD_TYPE VALUES ('HDFE91', 'Free Product');
---select * from REWARD_TYPE;
+INSERT INTO REWARDTYPE VALUES ('BDJD43', 'Gift Card');
+INSERT INTO REWARDTYPE VALUES ('HDFE91', 'Free Product');
+--select * from REWARDTYPE;
 
 
 -- Insert into rr rules
@@ -53,7 +53,7 @@ INSERT INTO RERULE VALUES ('D2NJ87', 1, 50, 'ACND14');
 -----------------------------------Stored Procedures-----------------------------------------------
 
 -- Adding a brand into marketplace by admin
-create or replace PROCEDURE admin_add_brand
+CREATE or REPLACE PROCEDURE admin_add_brand
 (
     brandId IN VARCHAR2,
     brandName IN VARCHAR2,
@@ -78,6 +78,7 @@ BEGIN
         ret := 1;
     END IF;    
 END;
+/
 
 -- Adding a customer into marketplace by admin
 CREATE or REPLACE PROCEDURE admin_add_customer
@@ -104,3 +105,4 @@ BEGIN
         ret := 1;
     END IF;    
 END;
+/

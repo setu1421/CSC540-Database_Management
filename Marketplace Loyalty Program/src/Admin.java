@@ -150,12 +150,13 @@ public class Admin {
         brandAddress = sc.nextLine();
 
         int selection = Utility.chooseAddMenu(sc, "addBrand");
+        CallableStatement statement = null;
 
         if (selection == 2) {
             adminUI();
         } else {
             try {
-                CallableStatement statement = Home.connection.prepareCall("{call admin_add_brand(?, ?, ?, ?)}");
+                statement = Home.connection.prepareCall("{call admin_add_brand(?, ?, ?, ?)}");
                 statement.setString(1, brandUserId);
                 statement.setString(2, brandName);
                 statement.setString(3, brandAddress);
@@ -170,8 +171,11 @@ public class Admin {
                     System.out.println("Brand has been added successfully.");
                 }
 
+                statement.close();
+
                 adminUI();
             } catch (SQLException e) {
+                Utility.close(statement);
                 System.out.println("Brand can not be added. Please try again.");
                 adminUI();
             }
@@ -194,12 +198,13 @@ public class Admin {
         customerPhone = sc.nextLine();
 
         int selection = Utility.chooseAddMenu(sc, "addCustomer");
+        CallableStatement statement = null;
 
         if (selection == 2) {
             adminUI();
         } else {
             try {
-                CallableStatement statement = Home.connection.prepareCall("{call admin_add_customer(?, ?, ?, ?, ?, ?)}");
+                statement = Home.connection.prepareCall("{call admin_add_customer(?, ?, ?, ?, ?, ?)}");
                 statement.setString(1, customerUserId);
                 statement.setString(2, customerFName);
                 statement.setString(3, customerLName);
@@ -216,8 +221,11 @@ public class Admin {
                     System.out.println("Customer has been added successfully.");
                 }
 
+                statement.close();
+
                 adminUI();
             } catch (SQLException e) {
+                Utility.close(statement);
                 System.out.println("Customer can not be added. Please try again.");
                 adminUI();
             }
@@ -231,10 +239,10 @@ public class Admin {
         Scanner sc = new Scanner(System.in);
 
         do {
-            System.out.print("Enter activity name:");
-            activityName = sc.nextLine();
             System.out.print("Enter activity code:");
             activityCode = sc.nextLine();
+            System.out.print("Enter activity name:");
+            activityName = sc.nextLine();
 
             selection = Utility.chooseAddMenu(sc, "addActivityType");
 
@@ -242,7 +250,7 @@ public class Admin {
                 adminUI();
             } else {
                 try {
-                    PreparedStatement ps = Home.connection.prepareStatement("Insert into ActivityType (code, name) values (?,?)");
+                    PreparedStatement ps = Home.connection.prepareStatement("Insert into ActivityType (ACTIVITYCODE, ACTIVITYNAME) values (?,?)");
                     ps.setString(1, activityCode);
                     ps.setString(2, activityName);
 
@@ -252,7 +260,10 @@ public class Admin {
                     } else {
                         System.out.println("Activity Type can not be added. Please try again.");
                     }
-                } catch (SQLException e) {
+                } catch (SQLIntegrityConstraintViolationException e) {
+                    System.out.println("Activity Type already present. Please try again.");
+                } catch(SQLException e)
+                {
                     System.out.println("Activity Type can not be added. Please try again.");
                 }
             }
@@ -268,10 +279,10 @@ public class Admin {
         Scanner sc = new Scanner(System.in);
 
         do {
-            System.out.print("Enter reward name:");
-            rewardName = sc.nextLine();
             System.out.print("Enter reward code:");
             rewardCode = sc.nextLine();
+            System.out.print("Enter reward name:");
+            rewardName = sc.nextLine();
 
             selection = Utility.chooseAddMenu(sc, "addRewardType");
 
@@ -279,7 +290,7 @@ public class Admin {
                 adminUI();
             } else {
                 try {
-                    PreparedStatement ps = Home.connection.prepareStatement("Insert into RewardType (code, name) values (?,?)");
+                    PreparedStatement ps = Home.connection.prepareStatement("Insert into RewardType (REWARDCODE, REWARDNAME) values (?,?)");
                     ps.setString(1, rewardCode);
                     ps.setString(2, rewardName);
 
@@ -289,7 +300,10 @@ public class Admin {
                     } else {
                         System.out.println("Reward Type can not be added. Please try again.");
                     }
-                } catch (SQLException e) {
+                } catch (SQLIntegrityConstraintViolationException e) {
+                    System.out.println("Reward Type already present. Please try again.");
+                } catch(SQLException e)
+                {
                     System.out.println("Reward Type can not be added. Please try again.");
                 }
             }
