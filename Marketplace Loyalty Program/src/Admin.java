@@ -171,7 +171,7 @@ public class Admin {
                 int ret = statement.getInt(4);
 
                 if (ret == 0) {
-                    System.out.println("Brand can not be added. Please try again.");
+                    System.out.println("Brand user id is already taken. Please try again.");
                 } else {
                     System.out.println("Brand has been added successfully.");
                 }
@@ -221,7 +221,7 @@ public class Admin {
 
                 int ret = statement.getInt(6);
                 if (ret == 0) {
-                    System.out.println("Customer can not be added. Please try again.");
+                    System.out.println("Customer user id is already taken. Please try again.");
                 } else {
                     System.out.println("Customer has been added successfully.");
                 }

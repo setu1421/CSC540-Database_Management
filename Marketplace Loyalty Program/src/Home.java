@@ -68,7 +68,7 @@ public class Home {
                         Login.loginUI();
                         break;
                     case 2:
-                        //Todo: Check for signup
+                        Signup.signUpUI();
                         break;
                     case 3:
                         //Todo: Show Queries

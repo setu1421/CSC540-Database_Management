@@ -222,3 +222,60 @@ BEGIN
     END IF;    
 END;
 /
+
+-- Adding a brand through brand signup
+CREATE or REPLACE PROCEDURE add_brand
+(
+    brandId IN VARCHAR2,
+    brandPassword IN VARCHAR2,
+    brandName IN VARCHAR2,
+    brandAddress IN VARCHAR2,
+    ret OUT INT
+) 
+AS
+OLDUSERIDCNT INT;
+JOIN_DATE DATE;
+BEGIN
+    SELECT COUNT(USERID) INTO OLDUSERIDCNT FROM USERS WHERE USERID = brandId;
+
+    IF OLDUSERIDCNT > 0 THEN
+        ret := 0;
+    ELSE
+        SELECT CURRENT_DATE INTO JOIN_DATE FROM DUAL;
+        -- Insert into users table
+        INSERT INTO USERS(USERID, PASSWORD, USERTYPE) VALUES(brandId, brandPassword, 'B');
+        -- Insert into brand table
+        INSERT INTO BRAND(BID, BNAME, ADDRESS, JOINDATE) VALUES(brandId, brandName, brandAddress, JOIN_DATE);
+
+        ret := 1;
+    END IF;    
+END;
+/
+
+-- Adding a customer through customer signup
+CREATE or REPLACE PROCEDURE add_customer
+(
+    customerId IN VARCHAR2,
+    customerPassword IN VARCHAR2,
+    customerFName IN VARCHAR2,
+    customerLName IN VARCHAR2,
+    customerPhoneNumber IN VARCHAR2,
+    customerAddress IN VARCHAR2, 
+    ret OUT INT
+) 
+AS
+OLDUSERIDCNT INT;
+BEGIN
+    SELECT COUNT(USERID) INTO OLDUSERIDCNT FROM USERS WHERE USERID = customerId;
+    IF OLDUSERIDCNT > 0 THEN
+        ret := 0;
+    ELSE
+        -- Insert into users table
+        INSERT INTO USERS(USERID, PASSWORD, USERTYPE) VALUES(customerId, customerPassword, 'C');
+        -- Insert into customer table
+        INSERT INTO CUSTOMER(CUSTOMERID, FNAME, LNAME, PHONENUMBER, ADDRESS) VALUES(customerId, customerFName, customerLName, customerPhoneNumber, customerAddress);
+
+        ret := 1;
+    END IF;    
+END;
+/
