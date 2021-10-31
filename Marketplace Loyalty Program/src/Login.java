@@ -8,7 +8,7 @@ import java.util.Scanner;
  */
 
 public class Login {
-    public static String userType = "";
+    public static String loggedInUserId, loggedInUserType;
 
     public static void loginUI() {
         Scanner sc = new Scanner(System.in);
@@ -31,16 +31,13 @@ public class Login {
             sc.nextLine();
         } while (!loginSuccessful);
 
-        if (userType.equalsIgnoreCase("A")) {
+        if (loggedInUserType.equalsIgnoreCase("A")) {
             Admin.adminUI();
-        } else if(userType.equalsIgnoreCase("B"))
-        {
-            //TODO: go to Brand dashboard
-        } else
-        {
-            //TODO: go to Customer dashboard
+        } else if (loggedInUserType.equalsIgnoreCase("B")) {
+            Brand.brandUI();
+        } else {
+            Customer.customerUI();
         }
-
     }
 
     private static boolean checkUserIdAndPassword(String userid, String password) {
@@ -53,7 +50,8 @@ public class Login {
         try {
             rs = Home.statement.executeQuery(sqlCred);
             if (rs.next()) {
-                userType = rs.getString("USERTYPE");
+                loggedInUserType = rs.getString("USERTYPE");
+                loggedInUserId = userid;
                 loginSuccessful = true;
             } else {
                 System.out.println("Login credentials are incorrect. Please try again.");

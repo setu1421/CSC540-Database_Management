@@ -3,6 +3,10 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Scanner;
 
+/**
+ * @author Setu Kumar Basak (sbasak4)
+ */
+
 public class Signup {
     public static void signUpUI() {
         Scanner sc = new Scanner(System.in);
