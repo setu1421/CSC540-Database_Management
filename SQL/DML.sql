@@ -22,13 +22,14 @@ INSERT INTO BRANDS VALUES ('foodlion', 'Foodlion, Inc.', 'San Francisco, CA', '0
 select * from brands;
 
 -- Insert into activity type
-INSERT INTO ACTIVITY_TYPE VALUES ('ACND12', 'Refer a friend');
-INSERT INTO ACTIVITY_TYPE VALUES ('ACND14', 'Purchase a product');
+INSERT INTO ACTIVITYTYPE VALUES ('A01', 'Purchase');
+INSERT INTO ACTIVITYTYPE VALUES ('A02', 'Leave a review');
+INSERT INTO ACTIVITYTYPE VALUES ('A03', 'Refer a friend');
 --select * from ACTIVITY_TYPE;
 
 -- Insert into reward type
-INSERT INTO REWARD_TYPE VALUES ('BDJD43', 'Gift Card');
-INSERT INTO REWARD_TYPE VALUES ('HDFE91', 'Free Product');
+INSERT INTO REWARDTYPE VALUES ('R01', 'Gift Card');
+INSERT INTO REWARDTYPE VALUES ('R02', 'Free Product');
 --select * from REWARD_TYPE;
 
 
