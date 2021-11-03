@@ -25,9 +25,9 @@ public class RRRules {
 
             if (selection == 1) {
                 if (add) {
-                    saveRERULE(reCategory, points);
+                    saveRRRULE(reCategory, points);
                 } else {
-                    updateRERULE(reCategory, points);
+                    updateRRRULE(reCategory, points);
                 }
             } else {
                 flag = true;
@@ -38,7 +38,7 @@ public class RRRules {
         } while (!flag);
     }
 
-    private static void saveRERULE(String reCategory, int points) {
+    private static void saveRRRULE(String reCategory, int points) {
         CallableStatement statement = null;
         try {
             statement = Home.connection.prepareCall("{call add_rr_rule(?, ?, ?, ?)}");
@@ -67,10 +67,10 @@ public class RRRules {
         }
     }
 
-    private static void updateRERULE(String reCategory, int points) {
+    private static void updateRRRULE(String reCategory, int points) {
         CallableStatement statement = null;
         try {
-            statement = Home.connection.prepareCall("{call update_re_rule(?, ?, ?, ?)}");
+            statement = Home.connection.prepareCall("{call update_rr_rule(?, ?, ?, ?)}");
             statement.setString(1, Login.loggedInUserId);
             statement.setString(2, reCategory);
             statement.setInt(3, points);

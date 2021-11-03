@@ -468,3 +468,53 @@ BEGIN
     END IF;    
 END;
 /
+
+-- Adding reward redeeming rule
+create or replace PROCEDURE add_rr_rule
+(
+    bId IN VARCHAR2,
+    reCode IN VARCHAR2,
+    pts IN NUMBER,
+    ret OUT INT
+) 
+AS
+SAMERULECOUNT INT;
+RETYPECOUNT INT;
+BEGIN
+    SELECT COUNT(BRANDID) INTO RETYPECOUNT FROM BRANDREWARDTYPE WHERE BRANDID = bId AND REWARDCODE = reCode;
+    SELECT COUNT(BRANDID) INTO SAMERULECOUNT FROM RRRULE WHERE BRANDID = bId AND REWARDCODE = reCode;
+
+    IF SAMERULECOUNT > 0 THEN
+        ret := 0;
+    ELSIF RETYPECOUNT = 0 THEN 
+        ret := 2;
+    ELSE
+        -- Insert into rerule table
+        INSERT INTO RRRULE(BRANDID, REWARDCODE, POINTS, VERSIONNO) values (bId, reCode, pts, 1);
+        ret := 1;
+    END IF;    
+END;
+/
+
+-- Adding reward updating rule
+create or replace PROCEDURE update_rr_rule
+(
+    bId IN VARCHAR2,
+    reCode IN VARCHAR2,
+    pts IN NUMBER,
+    ret OUT INT
+) 
+AS
+CURRVNO INT;
+BEGIN
+    SELECT MAX(VERSIONNO) INTO CURRVNO FROM RRRULE WHERE BRANDID = bId AND REWARDCODE = reCode;
+
+    IF CURRVNO > 0 THEN
+        -- Insert into rrrule table
+        INSERT INTO RRRULE(BRANDID, REWARDCODE, POINTS, VERSIONNO) values (bId, reCode, pts, CURRVNO + 1);
+        ret := 1;
+    ELSE
+        ret := 0;
+    END IF;    
+END;
+

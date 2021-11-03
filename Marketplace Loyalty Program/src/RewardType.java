@@ -14,6 +14,9 @@ public class RewardType {
         boolean flag = false;
 
         do {
+            System.out.print("Enter Quantity:");
+            int quantity = sc.nextInt();
+
             System.out.println("Choose what operation you want to perform");
             System.out.println("1. Gift Card");
             System.out.println("2. Free Product");
@@ -25,10 +28,10 @@ public class RewardType {
 
                 switch (selection) {
                     case 1:
-                        addRewardType("R01");
+                        addRewardType("R01", quantity);
                         break;
                     case 2:
-                        addRewardType("R02");
+                        addRewardType("R02", quantity);
                         break;
                     case 3:
                         flag = true;
@@ -45,12 +48,13 @@ public class RewardType {
         } while (!flag);
     }
 
-    private static void addRewardType(String rewardCode) {
-        String sql = "Insert into BRANDREWARDTYPE(BRANDID, REWARDCODE) values (?,?)";
+    private static void addRewardType(String rewardCode, int quantity) {
+        String sql = "Insert into BRANDREWARDTYPE(BRANDID, REWARDCODE, QUANTITY) values (?,?,?)";
         try {
             PreparedStatement ps = Home.connection.prepareStatement(sql);
             ps.setString(1, Login.loggedInUserId);
             ps.setString(2, rewardCode);
+            ps.setInt(3, quantity);
 
             int rows = ps.executeUpdate();
             if (rows > 0) {
