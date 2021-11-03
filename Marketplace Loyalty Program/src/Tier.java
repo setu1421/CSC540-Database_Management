@@ -126,6 +126,8 @@ public class Tier {
             }
 
             System.out.println("Tiers information has been added successfully.");
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Tiers name can not be same. Please try again.");
         } catch (SQLException e) {
             System.out.println("Tiers can not be added successfully. Please try again.");
         }

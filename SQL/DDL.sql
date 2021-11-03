@@ -535,3 +535,36 @@ BEGIN
         ret := 0;
     END IF;    
 END;
+
+-- validate loyalty program
+create or replace PROCEDURE validate_loyalty_program
+(
+    bId IN VARCHAR2,
+    lCode IN VARCHAR2,
+    lpType IN VARCHAR2,
+    ret OUT INT
+) 
+AS
+RERULECOUNT INT;
+RRRULECOUNT INT;
+TIERCOUNT INT;
+BEGIN
+    SELECT COUNT(DISTINCT ACTIVITYCODE) INTO RERULECOUNT FROM RERULE WHERE BRANDID = bId;
+    SELECT COUNT(DISTINCT REWARDCODE) INTO RRRULECOUNT FROM RRRULE WHERE BRANDID = bId;
+    
+    IF lpType = 'T' THEN
+        SELECT COUNT(DISTINCT TIERNAME) INTO TIERCOUNT FROM TIER WHERE LPCODE = lCode;
+    END IF;
+    
+    IF lpType = 'T' AND TIERCOUNT < 1 THEN
+        ret := 0;
+    ELSIF RERULECOUNT < 1 THEN
+        ret := 1;
+    ELSIF RRRULECOUNT < 1 THEN
+        ret := 2;
+    ELSE
+        UPDATE LOYALTYPROGRAM SET ISVALID = 1 WHERE BRANDID = bId;
+        ret := 3;
+    END IF;    
+END;
+/
