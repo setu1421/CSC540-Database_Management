@@ -398,5 +398,5 @@ BEGIN
             lpCode := get_next_id('TLP');
         END IF;    
         -- Insert into loyalty program table
-        INSERT INTO LOYALTYPROGRAM(LPCODE, LPNAME, ISVALID, BRANDID) VALUES(lpCode, lpName, 0, brandId);  
+        INSERT INTO LOYALTYPROGRAM(LPCODE, LPNAME, LPTYPE, ISVALID, BRANDID) VALUES(lpCode, lpName, lpType, 0, brandId);  
 END;
