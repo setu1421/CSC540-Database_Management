@@ -30,10 +30,10 @@ public class Tier {
                         tierSetup();
                         break;
                     case 2:
-                        //TODO
+                        ActivityType.activityTypeUI();
                         break;
                     case 3:
-                        //TODO
+                        RewardType.rewardTypeUI();
                         break;
                     case 4:
                         LoyaltyProgram.loyaltyProgramUI();

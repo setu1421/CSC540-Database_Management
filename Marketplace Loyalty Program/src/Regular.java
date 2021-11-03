@@ -23,10 +23,10 @@ public class Regular {
 
                 switch (selection) {
                     case 1:
-                        //TODO
+                        ActivityType.activityTypeUI();
                         break;
                     case 2:
-                        //TODO
+                        RewardType.rewardTypeUI();
                         break;
                     case 3:
                         LoyaltyProgram.loyaltyProgramUI();
