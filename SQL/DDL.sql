@@ -97,6 +97,7 @@ CREATE TABLE RRRULE(
 CREATE TABLE LOYALTYPROGRAM(
 	LPCODE VARCHAR2(50),
 	LPNAME VARCHAR2(80),
+    LPTYPE VARCHAR(1),
 	ISVALID NUMBER(1) DEFAULT 0,
 	BRANDID VARCHAR2(50),
 	CONSTRAINT PK_LP PRIMARY KEY(LPCODE),
@@ -217,6 +218,14 @@ CREATE TABLE REFERFRIEND(
 	CONSTRAINT FK_REFERFRIEND_CUSTOMERID FOREIGN KEY (CUSTOMERID) REFERENCES CUSTOMER(CUSTOMERID), 
     CONSTRAINT FK_REFERFRIEND_BID FOREIGN KEY (BID) REFERENCES BRAND(BID) ON DELETE CASCADE
 );
+
+CREATE TABLE TABKEY(
+	KEY VARCHAR2(10),
+	ID NUMBER(10),
+	CONSTRAINT PK_TABKEY primary key(KEY)
+);
+
+
 /*
 
 CREATE TABLE Address(
@@ -244,6 +253,34 @@ CREATE TABLE ADMIN(
 
 
 
+-----------------------------------Functions-----------------------------------------------
+
+-- Function for getting next code ID
+CREATE or REPLACE FUNCTION get_next_id
+(id_key IN VARCHAR2)
+RETURN VARCHAR2
+IS
+   NextID VARCHAR2(20);
+   NextNumber NUMBER(10);
+BEGIN
+
+    SAVEPOINT start_tran;
+
+    SELECT ID INTO NextNumber FROM TABKEY WHERE KEY = id_key;
+
+    NextID := concat(id_key, CAST(NextNumber AS VARCHAR2));
+
+    UPDATE TABKEY
+    SET ID = ID + 1
+    WHERE KEY = id_key;
+
+    RETURN NextID;
+
+    EXCEPTION
+    WHEN OTHERS THEN
+    ROLLBACK TO start_tran;
+    RAISE;
+END;
 
 
 -----------------------------------Stored Procedures-----------------------------------------------
@@ -359,3 +396,22 @@ BEGIN
     END IF;    
 END;
 /
+
+-- Brand enrollment in loyalty program
+CREATE or REPLACE PROCEDURE enroll_brand_loyalty_program
+(
+    lpName IN VARCHAR2,
+    lpType IN VARCHAR2,
+    brandId IN VARCHAR2,
+    lpCode OUT VARCHAR2
+) 
+AS
+BEGIN
+        IF lpType = 'R' THEN
+            lpCode := get_next_id('RLP');
+        ELSE 
+            lpCode := get_next_id('TLP');
+        END IF;    
+        -- Insert into loyalty program table
+        INSERT INTO LOYALTYPROGRAM(LPCODE, LPNAME, LPTYPE, ISVALID, BRANDID) VALUES(lpCode, lpName, lpType, 0, brandId);  
+END;

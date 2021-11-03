@@ -6,8 +6,6 @@ import java.util.Scanner;
 
 public class Brand {
     public static void brandUI() {
-        initialize();
-
         Scanner sc = new Scanner(System.in);
         int selection;
         boolean flag = false;
@@ -29,7 +27,7 @@ public class Brand {
 
                 switch (selection) {
                     case 1:
-                        //TODO
+                        LoyaltyProgram.loyaltyProgramUI();
                         break;
                     case 2:
                         //TODO
@@ -59,11 +57,5 @@ public class Brand {
                 sc.next();
             }
         } while (!flag);
-    }
-
-    // Check if the brand is already enrolled in a loyalty program or not.
-    public static void initialize()
-    {
-        //TODO: Get the LPCode which Brand is enrolled in if present.
     }
 }
