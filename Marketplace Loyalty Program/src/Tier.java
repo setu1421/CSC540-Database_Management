@@ -84,12 +84,12 @@ public class Tier {
                 if (i != 0) {
                     System.out.print("Enter Tier" + (i + 1) + " Points Required:");
                     tierPoint = sc.nextInt();
+                    System.out.print("Enter Tier" + (i + 1) + " Points Multiplier:");
+                    tierMultiplier = sc.nextInt();
                 } else {
                     System.out.println("Points required will be 0 for base tier.");
+                    System.out.println("Points multiplier will be 1 for base tier.");
                 }
-
-                System.out.print("Enter Tier" + (i + 1) + " Points Multiplier:");
-                tierMultiplier = sc.nextInt();
 
                 tierNames[i] = tierName;
                 tierPoints[i] = tierPoint;

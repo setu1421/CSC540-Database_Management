@@ -30,16 +30,16 @@ public class Brand {
                         LoyaltyProgram.loyaltyProgramUI();
                         break;
                     case 2:
-                        //TODO
+                        RERULES.reRulesUI(true);
                         break;
                     case 3:
-                        //TODO
+                        RERULES.reRulesUI(false);
                         break;
                     case 4:
-                        //TODO
+                        RRRules.rrRulesUI(true);
                         break;
                     case 5:
-                        //TODO
+                        RRRules.rrRulesUI(false);
                         break;
                     case 6:
                         //TODO

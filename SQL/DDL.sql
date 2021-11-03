@@ -417,3 +417,54 @@ BEGIN
         -- Insert into loyalty program table
         INSERT INTO LOYALTYPROGRAM(LPCODE, LPNAME, LPTYPE, ISVALID, BRANDID) VALUES(lpCode, lpName, lpType, 0, brandId);  
 END;
+/
+
+-- Adding reward earning rule
+create or replace PROCEDURE add_re_rule
+(
+    bId IN VARCHAR2,
+    acCode IN VARCHAR2,
+    pts IN NUMBER,
+    ret OUT INT
+) 
+AS
+SAMERULECOUNT INT;
+ACTYPECOUNT INT;
+BEGIN
+    SELECT COUNT(BRANDID) INTO ACTYPECOUNT FROM BRANDACTIVITYTYPE WHERE BRANDID = bId AND ACTIVITYCODE = acCode;
+    SELECT COUNT(BRANDID) INTO SAMERULECOUNT FROM RERULE WHERE BRANDID = bId AND ACTIVITYCODE = acCode;
+
+    IF SAMERULECOUNT > 0 THEN
+        ret := 0;
+    ELSIF ACTYPECOUNT = 0 THEN 
+        ret := 2;
+    ELSE
+        -- Insert into rerule table
+        INSERT INTO RERULE(BRANDID, ACTIVITYCODE, POINTS, VERSIONNO) values (bId, acCode, pts, 1);
+        ret := 1;
+    END IF;    
+END;
+/
+
+-- Updating reward earning rule
+create or replace PROCEDURE update_re_rule
+(
+    bId IN VARCHAR2,
+    acCode IN VARCHAR2,
+    pts IN NUMBER,
+    ret OUT INT
+) 
+AS
+CURRVNO INT;
+BEGIN
+    SELECT MAX(VERSIONNO) INTO CURRVNO FROM RERULE WHERE BRANDID = bId AND ACTIVITYCODE = acCode;
+
+    IF CURRVNO > 0 THEN
+        -- Insert into rerule table
+        INSERT INTO RERULE(BRANDID, ACTIVITYCODE, POINTS, VERSIONNO) values (bId, acCode, pts, CURRVNO + 1);
+        ret := 1;
+    ELSE
+        ret := 0;
+    END IF;    
+END;
+/
