@@ -125,7 +125,7 @@ public class Customer {
 
     private static void initialize() {
         //extracting all possible LPCodes from LP table
-        String sql = "select LPCODE, LPNAME from LOYALTYPROGRAM where ISVALID =  'TRUE'";
+        String sql = "select LPCODE, LPNAME from LOYALTYPROGRAM where ISVALID = 1";
 
         ResultSet rs = null;
         try {
