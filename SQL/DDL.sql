@@ -437,6 +437,30 @@ BEGIN
 END;
 /
 
+-- Customer enrollment for loyalty program
+CREATE or REPLACE PROCEDURE enroll_customer_loyalty_program
+(
+    customerId IN VARCHAR2,
+	lpCode IN VARCHAR2,
+    lpName IN VARCHAR2,
+	ret OUT INT
+) 
+AS
+OLDCUSTOMERIDCNT INT;
+JOIN_DATE DATE;
+BEGIN
+	SELECT COUNT(CUSTOMERID) INTO OLDCUSTOMERIDCNT FROM ENROLLP WHERE CUSTOMERID = customerId;
+
+    IF OLDCUSTOMERIDCNT > 0 THEN
+        ret := 0;
+	ELSE
+        SELECT CURRENT_DATE INTO JOIN_DATE FROM DUAL;
+        -- Insert into loyalty program table
+        INSERT INTO ENROLLP(CUSTOMERID, LPCODE, LPNAME, JOINDATE) VALUES(customerId, lpCode, lpName, JOIN_DATE);  
+	END IF;    
+END;
+/
+
 -- Adding reward earning rule
 create or replace PROCEDURE add_re_rule
 (
