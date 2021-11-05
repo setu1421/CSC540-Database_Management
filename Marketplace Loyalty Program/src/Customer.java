@@ -68,7 +68,7 @@ public class Customer {
     public static void enrollLoyaltyProgram() {
         System.out.println("Choose any of the loyalty programs available for you");
         for(int i=0; i<availableLPCodes.size(); i++) {
-            System.out.println(i + ". " + lpCodeNameMap.get(availableLPCodes.get(i)));
+            System.out.println((i+1) + ". " + lpCodeNameMap.get(availableLPCodes.get(i)));
         }
 
         int lpOption, selection;
@@ -80,7 +80,7 @@ public class Customer {
             System.out.print("Enter your option:");
 
             lpOption = sc.nextInt();
-            lpCode = availableLPCodes.get(lpOption);
+            lpCode = availableLPCodes.get(lpOption-1);
             lpName = lpCodeNameMap.get(lpCode);
 
             System.out.println("Choose what operation you want to perform");
