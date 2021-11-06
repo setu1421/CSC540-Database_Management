@@ -71,7 +71,7 @@ public class Home {
                         Signup.signUpUI();
                         break;
                     case 3:
-                        //Todo: Show Queries
+                        ShowQuery.showQueryUI();
                         break;
                     case 4:
                         exitProgram();

@@ -271,6 +271,15 @@ CREATE TABLE ADMIN(
     CONSTRAINT FK_ADMIN FOREIGN KEY(USERID) REFERENCES USERS(USERID) ON DELETE CASCADE
 );*/
 
+---------------------------------User Define Types--------------------------------------
+
+CREATE TYPE customer_type as OBJECT (
+  CUSTID VARCHAR(50),
+  CUSTFNAME VARCHAR(50),
+  CUSTLNAME VARCHAR(50)
+);
+
+CREATE TYPE customer_table_type as TABLE OF customer_type;
 
 
 -----------------------------------Functions-----------------------------------------------
@@ -301,6 +310,19 @@ BEGIN
     ROLLBACK TO start_tran;
     RAISE;
 END;
+/
+
+
+CREATE OR REPLACE FUNCTION show_query_1 
+  RETURN customer_table_type PIPELINED AS
+BEGIN
+    FOR cur IN (SELECT CUSTOMERID, FNAME, LNAME FROM CUSTOMER)
+    LOOP
+      PIPE ROW(customer_type(cur.CUSTOMERID, cur.FNAME, cur.LNAME));   
+    END LOOP; 
+    RETURN;
+END;
+/
 
 
 -----------------------------------Stored Procedures-----------------------------------------------

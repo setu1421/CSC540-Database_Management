@@ -1,6 +1,5 @@
 import java.sql.*;
 import java.sql.SQLException;
-import java.util.Locale;
 import java.util.Scanner;
 
 /**
