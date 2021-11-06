@@ -34,12 +34,11 @@ public class LeaveReview {
             } else {
                 CallableStatement statement = null;
                 try {
-                    statement = Home.connection.prepareCall("{call customer_add_review(?, ?, ?, ?, ?)}");
+                    statement = Home.connection.prepareCall("{call customer_add_review(?, ?, ?, ?)}");
                     statement.setString(1, Login.loggedInUserId);
                     statement.setString(2, brandId);
-                    statement.setString(3, lpCode);
+                    statement.setString(3, review);
                     statement.setString(4, activityCode);
-                    statement.setString(5, activityCode);
 
                     statement.execute();
                     System.out.println("Review has been added successfully.");
