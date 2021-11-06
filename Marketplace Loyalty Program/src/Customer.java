@@ -66,54 +66,40 @@ public class Customer {
     }
 
     public static void enrollLoyaltyProgram() {
-        System.out.println("Choose any of the loyalty programs available for you");
-        for(int i=0; i<availableLPCodes.size(); i++) {
-            System.out.println((i+1) + ". " + lpCodeNameMap.get(availableLPCodes.get(i)));
-        }
-
-        int lpOption, selection;
-        String lpCode, lpName;
-        boolean flag = false;
-        Scanner sc = new Scanner(System.in);
-
-        do {
-            System.out.print("Enter your option:");
-
-            lpOption = sc.nextInt();
-            lpCode = availableLPCodes.get(lpOption-1);
-            lpName = lpCodeNameMap.get(lpCode);
-
-            System.out.println("Choose what operation you want to perform");
-            System.out.println("1. Enroll in the Loyalty Program");
-            System.out.println("2. Go Back");
-            System.out.print("Enter your option:");
-
-            try {
-                selection = sc.nextInt();
-                flag = true;
-
-                switch (selection) {
-                    case 1:
-                        if (lpName != null) {
-                            saveLoyaltyProgram(lpCode, lpName);
-                        } else {
-                            System.out.println("Sorry, any available Loyalty Program was not chosen");
-                        }
-                        Customer.customerUI();
-                        break;
-                    case 2:
-                        Customer.customerUI();
-                        break;
-                    default:
-                        System.out.println("You have entered a wrong option. Please choose again.");
-                        flag = false;
-                }
-            } catch (Exception e) {
-                System.out.println("Please choose between 1 and 2. Please choose again.");
-                sc.next();
+        if (availableLPCodes.size() == 0) {
+            System.out.println("No Loyalty Program is available.");
+            customerUI();
+        } else {
+            System.out.println("Choose any of the loyalty programs available for you");
+            for (int i = 0; i < availableLPCodes.size(); i++) {
+                System.out.println((i + 1) + ". " + lpCodeNameMap.get(availableLPCodes.get(i)));
             }
-        } while (!flag);
+
+            boolean flag = false;
+            Scanner sc = new Scanner(System.in);
+
+            do {
+                System.out.print("Enter your option:");
+                int lpOption = sc.nextInt();
+
+                if (lpOption >= 1 && lpOption <= availableLPCodes.size()) {
+                    String lpCode = availableLPCodes.get(lpOption - 1);
+
+                    int selection = Utility.chooseAddMenu(sc, "Enroll in the Loyalty Program");
+
+                    if (selection != 2) {
+                        saveLoyaltyProgram(lpCode);
+                    }
+
+                    customerUI();
+                    flag = true;
+                } else {
+                    System.out.println("Please choose valid loyalty program option.");
+                }
+            } while (!flag);
+        }
     }
+
 
     public static void viewWallet() {
         int selection;
@@ -162,6 +148,11 @@ public class Customer {
     }
 
     private static void initialize() {
+        allLPCodes.clear();
+        enrolledLPCodes.clear();
+        availableLPCodes.clear();
+        lpCodeNameMap.clear();
+
         //extracting all possible LPCodes from LP table
         String sql = "select LPCODE, LPNAME from LOYALTYPROGRAM where ISVALID = 1";
 
@@ -198,18 +189,17 @@ public class Customer {
         availableLPCodes = allLPCodes;
     }
 
-    private static void saveLoyaltyProgram(String lpCode, String lpName) {
+    private static void saveLoyaltyProgram(String lpCode) {
         CallableStatement statement = null;
         try {
-            statement = Home.connection.prepareCall("{call enroll_customer_loyalty_program(?, ?, ?, ?)}");
+            statement = Home.connection.prepareCall("{call enroll_customer_loyalty_program(?, ?, ?)}");
             statement.setString(1, Login.loggedInUserId);
             statement.setString(2, lpCode);
-            statement.setString(3, lpName);
-            statement.registerOutParameter(4, Types.INTEGER);
+            statement.registerOutParameter(3, Types.INTEGER);
 
             statement.execute();
 
-            int ret = statement.getInt(4);
+            int ret = statement.getInt(3);
 
             if (ret == 0) {
                 System.out.println("Loyalty Program is already enrolled. Please try again.");
