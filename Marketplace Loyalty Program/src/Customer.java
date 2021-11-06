@@ -117,6 +117,25 @@ public class Customer {
 
     public static void viewWallet() {
 
+        System.out.println("Here is your wallet: ");
+        String sql = "select CUSTOMERID, BID, ACTIVITYCODE, POINTSEARNED, REWARDCODE, POINTSREEDEMED from WALLETRE JOIN WALLETRR USING (CUSTOMERID) where CUSTOMERID='" + Login.loggedInUserId + "'";
+
+        ResultSet rs = null;
+        try {
+            rs = Home.statement.executeQuery(sql);
+            while (rs.next()) {
+                System.out.println("CustomerId: " + rs.getString("CUSTOMERID") +
+                        "BrandId: " + rs.getString("BID") +
+                        "ActivityCode: " + rs.getString("ACTIVITYCODE") +
+                        "PointsEarned: " + rs.getString("POINTSEARNED") +
+                        "RewardCode: " + rs.getString("REWARDCODE") +
+                        "PointsRedeemed: " + rs.getString("POINTSREEDEMED"));
+            }
+            rs.close();
+        } catch (SQLException e) {
+            Utility.close(rs);
+            e.printStackTrace();
+        }
     }
 
     public static void redeemPoints() {
