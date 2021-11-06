@@ -46,6 +46,7 @@ public class Purchase {
                         savePurchaseInformation(Login.loggedInUserId, brandId, gcUsed);
                         purchasePoints = getPointsFromRERule(activityCode,brandId);
                         updateCustomerWalletRE(Login.loggedInUserId, brandId, activityCode, purchasePoints);
+                        RewardActivity.rewardActivityUI();
                         break;
                     case 2:
                         Customer.customerUI();

@@ -64,7 +64,7 @@ public class RewardActivity {
                                 lpActivityCodeNameMap.get("Purchase"), "Purchase");
                         break;
                     case "Leave a review":
-                        LeaveReview.leaveReviewUI();
+                        LeaveReview.leaveReviewUI(lpBrandMap.get(lpCode));
                         break;
                     case "Refer a friend":
                         ReferFriend.referFriendUI();
