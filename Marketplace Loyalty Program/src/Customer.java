@@ -48,7 +48,7 @@ public class Customer {
                         viewWallet();
                         break;
                     case 4:
-                        redeemPoints();
+                        RedeemPoints.redeemPointsUI();
                         break;
                     case 5:
                         Home.showMenu();
@@ -159,10 +159,6 @@ public class Customer {
                 sc.next();
             }
         } while (!flag);
-    }
-
-    public static void redeemPoints() {
-
     }
 
     private static void initialize() {
