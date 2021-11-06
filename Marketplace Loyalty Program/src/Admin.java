@@ -155,11 +155,11 @@ public class Admin {
         brandAddress = sc.nextLine();
 
         int selection = Utility.chooseAddMenu(sc, "addBrand");
-        CallableStatement statement = null;
 
-        if (selection == 2) {
+        if (selection == 2 || (selection == 1 && !validateBrand(brandUserId, brandName, brandAddress))) {
             adminUI();
         } else {
+            CallableStatement statement = null;
             try {
                 statement = Home.connection.prepareCall("{call admin_add_brand(?, ?, ?, ?)}");
                 statement.setString(1, brandUserId);
@@ -187,6 +187,27 @@ public class Admin {
         }
     }
 
+    private static boolean validateBrand(String brandUserId, String brandName, String brandAddress) {
+        boolean isValid = true;
+
+        if (brandUserId.trim().isEmpty()) {
+            System.out.println("Brand UserId can not be empty.");
+            isValid = false;
+        }
+
+        if (brandName.trim().isEmpty()) {
+            System.out.println("Brand name can not be empty.");
+            isValid = false;
+        }
+
+        if (brandAddress.trim().isEmpty()) {
+            System.out.println("Brand address can not be empty.");
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
     public static void addCustomer() {
         String customerUserId, customerFName, customerLName, customerAddress, customerPhone;
 
@@ -203,11 +224,11 @@ public class Admin {
         customerPhone = sc.nextLine();
 
         int selection = Utility.chooseAddMenu(sc, "addCustomer");
-        CallableStatement statement = null;
 
-        if (selection == 2) {
+        if (selection == 2 || (selection == 1 && !validateCustomer(customerUserId, customerFName, customerLName, customerAddress, customerPhone))) {
             adminUI();
         } else {
+            CallableStatement statement = null;
             try {
                 statement = Home.connection.prepareCall("{call admin_add_customer(?, ?, ?, ?, ?, ?)}");
                 statement.setString(1, customerUserId);
@@ -237,6 +258,37 @@ public class Admin {
         }
     }
 
+    private static boolean validateCustomer(String customerUserId, String customerFName, String customerLName, String customerAddress, String customerPhone) {
+        boolean isValid = true;
+
+        if (customerUserId.trim().isEmpty()) {
+            System.out.println("Customer UserId can not be empty.");
+            isValid = false;
+        }
+
+        if (customerFName.trim().isEmpty()) {
+            System.out.println("Customer first name can not be empty.");
+            isValid = false;
+        }
+
+        if (customerLName.trim().isEmpty()) {
+            System.out.println("Customer last name can not be empty.");
+            isValid = false;
+        }
+
+        if (customerAddress.trim().isEmpty()) {
+            System.out.println("Customer address can not be empty.");
+            isValid = false;
+        }
+
+        if (customerPhone.trim().isEmpty()) {
+            System.out.println("Customer phone can not be empty.");
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
     public static void addActivityType() {
         String activityName, activityCode;
         int selection;
@@ -251,7 +303,7 @@ public class Admin {
 
             selection = Utility.chooseAddMenu(sc, "addActivityType");
 
-            if (selection == 2) {
+            if (selection == 2 || (selection == 1 && !validateActivityType(activityName, activityCode))) {
                 adminUI();
             } else {
                 try {
@@ -267,14 +319,29 @@ public class Admin {
                     }
                 } catch (SQLIntegrityConstraintViolationException e) {
                     System.out.println("Activity Type already present. Please try again.");
-                } catch(SQLException e)
-                {
+                } catch (SQLException e) {
                     System.out.println("Activity Type can not be added. Please try again.");
                 }
             }
 
             sc.nextLine();
         } while (selection != 2);
+    }
+
+    private static boolean validateActivityType(String activityName, String activityCode) {
+        boolean isValid = true;
+
+        if (activityName.trim().isEmpty()) {
+            System.out.println("Activity name can not be empty.");
+            isValid = false;
+        }
+
+        if (activityCode.trim().isEmpty()) {
+            System.out.println("Activity code can not be empty.");
+            isValid = false;
+        }
+
+        return isValid;
     }
 
     public static void addRewardType() {
@@ -291,7 +358,7 @@ public class Admin {
 
             selection = Utility.chooseAddMenu(sc, "addRewardType");
 
-            if (selection == 2) {
+            if (selection == 2 || (selection == 1 && !validateRewardType(rewardName, rewardCode))) {
                 adminUI();
             } else {
                 try {
@@ -307,14 +374,29 @@ public class Admin {
                     }
                 } catch (SQLIntegrityConstraintViolationException e) {
                     System.out.println("Reward Type already present. Please try again.");
-                } catch(SQLException e)
-                {
+                } catch (SQLException e) {
                     System.out.println("Reward Type can not be added. Please try again.");
                 }
             }
 
             sc.nextLine();
         } while (selection != 2);
+    }
+
+    private static boolean validateRewardType(String rewardName, String rewardCode) {
+        boolean isValid = true;
+
+        if (rewardName.trim().isEmpty()) {
+            System.out.println("Reward name can not be empty.");
+            isValid = false;
+        }
+
+        if (rewardCode.trim().isEmpty()) {
+            System.out.println("Reward code can not be empty.");
+            isValid = false;
+        }
+
+        return isValid;
     }
 
     public static void adminLogout() {
