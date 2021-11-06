@@ -23,7 +23,7 @@ public class RRRules {
                 selection = Utility.chooseAddMenu(sc, "updateRRRule");
             }
 
-            if (selection == 1) {
+            if (selection == 1 && validateRRRule(reCategory, points)) {
                 if (add) {
                     saveRRRULE(reCategory, points);
                 } else {
@@ -36,6 +36,22 @@ public class RRRules {
 
             sc.nextLine();
         } while (!flag);
+    }
+
+    private static boolean validateRRRule(String reCategory, int points) {
+        boolean isValid = true;
+
+        if (reCategory.trim().isEmpty()) {
+            System.out.println("Reward category can not be empty.");
+            isValid = false;
+        }
+
+        if (points < 0) {
+            System.out.println("Points must be greater than and equal to 0.");
+            isValid = false;
+        }
+
+        return isValid;
     }
 
     private static void saveRRRULE(String reCategory, int points) {

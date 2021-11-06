@@ -21,7 +21,7 @@ public class Login {
 
             int selection = Utility.chooseAddMenu(sc, "Sign in");
 
-            if (selection == 1) {
+            if (selection == 1 && validateLogin(userid, password)) {
                 loginSuccessful = checkUserIdAndPassword(userid, password);
             } else {
                 Home.showMenu();
@@ -37,6 +37,22 @@ public class Login {
         } else {
             Customer.customerUI();
         }
+    }
+
+    private static boolean validateLogin(String userid, String password) {
+        boolean isValid = true;
+
+        if (userid.trim().isEmpty()) {
+            System.out.println("UserId can not be empty.");
+            isValid = false;
+        }
+
+        if (password.trim().isEmpty()) {
+            System.out.println("Password can not be empty.");
+            isValid = false;
+        }
+
+        return isValid;
     }
 
     private static boolean checkUserIdAndPassword(String userid, String password) {

@@ -62,7 +62,7 @@ public class Signup {
         int selection = Utility.chooseAddMenu(sc, "Sign-up");
         CallableStatement statement = null;
 
-        if (selection == 2) {
+        if (selection == 2 || (selection == 1 && !validateBrand(brandUserId, brandPassword, brandName, brandAddress))) {
             signUpUI();
         } else {
             try {
@@ -92,6 +92,32 @@ public class Signup {
         }
     }
 
+    private static boolean validateBrand(String brandUserId, String brandPassword, String brandName, String brandAddress) {
+        boolean isValid = true;
+
+        if (brandUserId.trim().isEmpty()) {
+            System.out.println("Brand UserId can not be empty.");
+            isValid = false;
+        }
+
+        if (brandPassword.trim().isEmpty()) {
+            System.out.println("Brand password can not be empty.");
+            isValid = false;
+        }
+
+        if (brandName.trim().isEmpty()) {
+            System.out.println("Brand name can not be empty.");
+            isValid = false;
+        }
+
+        if (brandAddress.trim().isEmpty()) {
+            System.out.println("Brand address can not be empty.");
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
     public static void addCustomer() {
         String customerUserId, customerPassword, customerFName, customerLName, customerAddress, customerPhone;
 
@@ -112,7 +138,7 @@ public class Signup {
         int selection = Utility.chooseAddMenu(sc, "Sign-up");
         CallableStatement statement = null;
 
-        if (selection == 2) {
+        if (selection == 2 || (selection == 1 && !validateCustomer(customerUserId, customerPassword, customerFName, customerLName, customerAddress, customerPhone))) {
             signUpUI();
         } else {
             try {
@@ -142,5 +168,41 @@ public class Signup {
                 addCustomer();
             }
         }
+    }
+
+    private static boolean validateCustomer(String customerUserId, String customerPassword, String customerFName, String customerLName, String customerAddress, String customerPhone) {
+        boolean isValid = true;
+
+        if (customerUserId.trim().isEmpty()) {
+            System.out.println("Customer UserId can not be empty.");
+            isValid = false;
+        }
+
+        if (customerPassword.trim().isEmpty()) {
+            System.out.println("Customer password can not be empty.");
+            isValid = false;
+        }
+
+        if (customerFName.trim().isEmpty()) {
+            System.out.println("Customer first name can not be empty.");
+            isValid = false;
+        }
+
+        if (customerLName.trim().isEmpty()) {
+            System.out.println("Customer last name can not be empty.");
+            isValid = false;
+        }
+
+        if (customerAddress.trim().isEmpty()) {
+            System.out.println("Customer address can not be empty.");
+            isValid = false;
+        }
+
+        if (customerPhone.trim().isEmpty()) {
+            System.out.println("Customer phone can not be empty.");
+            isValid = false;
+        }
+
+        return isValid;
     }
 }
