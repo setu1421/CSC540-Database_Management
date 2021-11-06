@@ -116,6 +116,9 @@ public class Customer {
     }
 
     public static void viewWallet() {
+        int selection;
+        Scanner sc = new Scanner(System.in);
+        boolean flag = false;
 
         System.out.println("Here is your wallet: ");
         String sql = "select CUSTOMERID, BID, ACTIVITYCODE, POINTSEARNED, REWARDCODE, POINTSREEDEMED from WALLETRE JOIN WALLETRR USING (CUSTOMERID) where CUSTOMERID='" + Login.loggedInUserId + "'";
@@ -136,6 +139,26 @@ public class Customer {
             Utility.close(rs);
             e.printStackTrace();
         }
+
+        do {
+            System.out.println("1. Go Back");
+            System.out.print("Enter your option:");
+
+            try {
+                selection = sc.nextInt();
+                flag = true;
+
+                if (selection == 1) {
+                    Customer.customerUI();
+                } else {
+                    System.out.println("You have entered a wrong option. Please choose again.");
+                    flag = false;
+                }
+            } catch (Exception e) {
+                System.out.println("Please choose between 1. Please choose again.");
+                sc.next();
+            }
+        } while (!flag);
     }
 
     public static void redeemPoints() {
