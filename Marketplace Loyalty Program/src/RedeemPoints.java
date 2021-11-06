@@ -1,7 +1,4 @@
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -59,7 +56,7 @@ public class RedeemPoints {
 
                 switch (selection) {
                     case 1:
-                        updateCustomerWalletRR(rewardId, reedemedPoints);
+                        updateCustomerWalletRR(rewardId, reedemedPoints, brandId);
                         redeemPointsUI();
                         break;
                     case 2:
@@ -121,7 +118,21 @@ public class RedeemPoints {
         }
     }
 
-    public static void updateCustomerWalletRR(String rewardId, int reedemedPoints) {
+    public static void updateCustomerWalletRR(String rewardId, int reedemedPoints, String brandId) {
+        CallableStatement statement = null;
+        try {
+            statement = Home.connection.prepareCall("{call update_customer_wallet_rr(?, ?, ?, ?)}");
+            statement.setString(1, Login.loggedInUserId);
+            statement.setString(2, brandId);
+            statement.setString(3, rewardId);
+            statement.setString(4, String.valueOf(reedemedPoints));
 
+            statement.execute();
+            statement.close();
+        } catch (SQLException e) {
+            Utility.close(statement);
+            System.out.println("Customer Wallet RR can not be updated. Please try again.");
+            RewardActivity.rewardActivityUI();
+        }
     }
 }
