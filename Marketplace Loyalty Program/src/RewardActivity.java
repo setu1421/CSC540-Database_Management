@@ -14,8 +14,11 @@ import java.util.Scanner;
 public class RewardActivity {
 
     public static HashMap<String, String> lpCodeNameMap = new HashMap<String, String>();
+    public static HashMap<String, String> lpActivityCodeNameMap = new HashMap<String, String>();
+    public static HashMap<String, String> lpBrandMap = new HashMap<String, String>();
     public static ArrayList<String> joinedLPCodes = new ArrayList<String>();
     public static ArrayList<String> lpActivityTypes = new ArrayList<>();
+
 
     public static void rewardActivityUI() {
         getJoinedLoyaltyPrograms();
@@ -57,7 +60,8 @@ public class RewardActivity {
 
                 switch (lpActivityTypes.get(selection-1)) {
                     case "Purchase":
-                        Purchase.purchaseUI();
+                        Purchase.purchaseUI(lpBrandMap.get(lpCode), lpCode, lpName,
+                                lpActivityCodeNameMap.get("Purchase"), "Purchase");
                         break;
                     case "Leave a review":
                         LeaveReview.leaveReviewUI();
@@ -111,13 +115,15 @@ public class RewardActivity {
     }
 
     public static void getLPActivityTypes(String lpCode) {
-        String sql = "select ACTIVITYNAME from LOYALTYPROGRAM JOIN BRANDACTIVITYTYPE USING (BRANDID) JOIN ACTIVITYTYPE USING (ACTIVITYCODE)  where LPCODE =  '" + lpCode + "'";
+        String sql = "select ACTIVITYCODE, ACTIVITYNAME, BRANDID from LOYALTYPROGRAM JOIN BRANDACTIVITYTYPE USING (BRANDID) JOIN ACTIVITYTYPE USING (ACTIVITYCODE)  where LPCODE =  '" + lpCode + "'";
 
         ResultSet rs = null;
         try {
             rs = Home.statement.executeQuery(sql);
             while (rs.next()) {
                 lpActivityTypes.add(rs.getString("ACTIVITYNAME"));
+                lpActivityCodeNameMap.put(rs.getString("ACTIVITYCODE"),rs.getString("ACTIVITYNAME"));
+                lpBrandMap.put(lpCode, rs.getString("BRANDID"));
             }
             rs.close();
         } catch (SQLException e) {

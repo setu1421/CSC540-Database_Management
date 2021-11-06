@@ -483,6 +483,23 @@ BEGIN
 END;
 /
 
+-- update customer wallet RE
+CREATE or REPLACE PROCEDURE update_customer_wallet_re
+(
+    customerId IN VARCHAR2,
+	bId IN VARCHAR2,
+    activityCode IN VARCHAR2,
+	pointsEarned IN VARCHAR2,
+) 
+AS
+DATE_OF_ACTIVITY DATE;
+BEGIN
+	SELECT CURRENT_DATE INTO DATE_OF_ACTIVITY FROM DUAL;
+	-- Insert into customer walletre table
+	INSERT INTO WALLETRE(CUSTOMERID, BID, ACTIVITYCODE, POINTSEARNED, DATEOFACTIVITY) VALUES(customerId, bId, activityCode, pointsEarned, DATE_OF_ACTIVITY);      
+END;
+/
+
 -- Adding reward earning rule
 create or replace PROCEDURE add_re_rule
 (
