@@ -57,10 +57,8 @@ public class Customer {
                         System.out.println("You have entered a wrong option. Please choose again.");
                         flag = false;
                 }
-
             } catch (Exception e) {
                 System.out.println("Please choose between 1 and 5. Please choose again.");
-                sc.next();
             }
         } while (!flag);
     }

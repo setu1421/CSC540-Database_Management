@@ -19,14 +19,14 @@ public class ReferFriend {
         boolean flag = false;
 
         System.out.println("Choose a friend to refer:");
-        for (int i=0; i<userFriendList.size(); i++) {
-            System.out.println((i+1) + ". " + userFriendList.get(i));
+        for (int i = 0; i < userFriendList.size(); i++) {
+            System.out.println((i + 1) + ". " + userFriendList.get(i));
         }
 
         do {
             System.out.print("Enter your option:");
             referOption = sc.nextInt();
-            userFriendList.remove(referOption-1); // can't refer the same person multiple times
+            userFriendList.remove(referOption - 1); // can't refer the same person multiple times
 
             System.out.println("Choose what operation you want to perform");
             System.out.println("1. Refer a friend");
@@ -127,6 +127,4 @@ public class ReferFriend {
         }
         return points;
     }
-
-
 }
