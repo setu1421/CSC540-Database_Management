@@ -49,12 +49,13 @@ public class RewardType {
     }
 
     private static void addRewardType(String rewardCode, int quantity) {
-        String sql = "Insert into BRANDREWARDTYPE(BRANDID, REWARDCODE, QUANTITY) values (?,?,?)";
+        String sql = "Insert into BRANDREWARDTYPE(BRANDID, REWARDCODE, TOTQUANTITY, CURQUANTITY) values (?,?,?,?)";
         try {
             PreparedStatement ps = Home.connection.prepareStatement(sql);
             ps.setString(1, Login.loggedInUserId);
             ps.setString(2, rewardCode);
             ps.setInt(3, quantity);
+            ps.setInt(4, quantity);
 
             int rows = ps.executeUpdate();
             if (rows > 0) {
