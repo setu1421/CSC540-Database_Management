@@ -1,88 +1,137 @@
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 /**
  * @author Md Mirajul Islam (mislam22)
+ * @author Setu Kumar Basak (sbasak4)
  */
 
 public class RedeemPoints {
-
     public static ArrayList<String> availableBrandIds = new ArrayList<>();
+    public static ArrayList<String> availableLP = new ArrayList<>();
     public static ArrayList<String> availableRewardIds = new ArrayList<>();
-    public static int rewardPoints=0;
+    public static ArrayList<String> availableRewardNames = new ArrayList<>();
+    public static int rewardPoints = 0;
 
     public static void redeemPointsUI() {
         getAvailableBrands();
         Scanner sc = new Scanner(System.in);
-        int selection;
         boolean flag = false;
 
-        System.out.println("Choose the brand to Redeem Points");
-
-        for (int i=0; i<availableBrandIds.size(); i++) {
-            System.out.println((i+1) + ". " + availableBrandIds.get(i));
+        if (availableLP.size() == 0) {
+            System.out.println("Sorry, customer hasn't enrolled in any Loyalty Program");
+            Customer.customerUI();
+            return;
         }
-        System.out.print("Enter your option:");
-        int brandOption = sc.nextInt();
-        String brandId = availableBrandIds.get(brandOption-1);
-
-        getAvailableRewards(brandId);
-
-        System.out.println("Choose the Reward to redeem");
-
-        for (int i=0; i<availableRewardIds.size(); i++) {
-            System.out.println((i+1) + ". " + availableRewardIds.get(i));
-        }
-        System.out.print("Enter your option:");
-        int rewardOption = sc.nextInt();
-        String rewardId = availableRewardIds.get(rewardOption-1);
-
-        System.out.print("Enter Quantity:");
-        int rewardQty = sc.nextInt();
-        int reedemedPoints = rewardQty * rewardPoints;
 
         do {
-            System.out.println("Choose what operation you want to perform");
-            System.out.println("1. Rewards Selection");
-            System.out.println("2. Go Back");
+            boolean innerFlag = false;
+            System.out.println("Choose the loyalty program to Redeem Points");
+            for (int i = 0; i < availableLP.size(); i++) {
+                System.out.println((i + 1) + ". " + availableLP.get(i));
+            }
+
             System.out.print("Enter your option:");
+            int lpOption = sc.nextInt();
 
-            try {
-                selection = sc.nextInt();
-                flag = true;
+            if (lpOption >= 1 && lpOption <= availableLP.size()) {
+                String lpId = availableLP.get(lpOption - 1);
+                String brandId = availableBrandIds.get(lpOption - 1);
 
-                switch (selection) {
-                    case 1:
-                        updateCustomerWalletRR(rewardId, reedemedPoints, brandId);
-                        redeemPointsUI();
-                        break;
-                    case 2:
-                        Customer.customerUI();
-                        break;
-                    default:
+                getAvailableRewards(brandId);
+
+                do {
+                    System.out.println("Choose the Reward to redeem.");
+                    for (int i = 0; i < availableRewardIds.size(); i++) {
+                        System.out.println((i + 1) + ". " + availableRewardIds.get(i) + ":" + availableRewardNames.get(i));
+                    }
+                    System.out.println((availableRewardIds.size() + 1) + ". Go Back");
+                    System.out.print("Enter your option:");
+
+                    int rewardOption = sc.nextInt();
+
+                    innerFlag = true;
+                    if (rewardOption >= 1 && rewardOption <= availableRewardIds.size() + 1) {
+
+                        if (rewardOption == availableRewardIds.size() + 1) {
+                            Customer.customerUI();
+                            return;
+                        }
+
+                        String rewardCode = availableRewardIds.get(rewardOption - 1);
+                        String rewardName = availableRewardNames.get(rewardOption - 1);
+                        System.out.print("Enter Quantity:");
+                        int rewardQty = sc.nextInt();
+
+                        if (rewardQty <= 0) {
+                            innerFlag = false;
+                            System.out.println("Please enter non negative value.");
+                            continue;
+                        }
+
+                        int selection = Utility.chooseAddMenu(sc, "Rewards Selection");
+
+                        if (selection == 2) {
+                            Customer.customerUI();
+                        } else {
+                            doRedeemActivity(brandId, lpId, rewardCode, rewardQty);
+                        }
+                    } else {
                         System.out.println("You have entered a wrong option. Please choose again.");
-                        flag = false;
-                }
+                        innerFlag = false;
+                    }
+                } while (!innerFlag);
 
-            } catch (Exception e) {
-                System.out.println("Please choose between 1 and 2. Please choose again.");
-                sc.next();
+                flag = true;
+            } else {
+                System.out.println("Please choose valid loyalty program option.");
             }
         } while (!flag);
     }
 
+    private static void doRedeemActivity(String brandId, String lpCode, String rewardCode, int rewardQty) {
+        CallableStatement statement = null;
+        try {
+            statement = Home.connection.prepareCall("{call customer_redeem(?, ?, ?, ?, ?, ?, ?)}");
+            statement.setString(1, Login.loggedInUserId);
+            statement.setString(2, brandId);
+            statement.setString(3, lpCode);
+            statement.setString(4, rewardCode);
+            statement.setInt(5, rewardQty);
+            statement.setInt(6, rewardPoints);
+            statement.registerOutParameter(7, Types.INTEGER);
+
+            statement.execute();
+            int ret = statement.getInt(7);
+
+            if (ret == 1) {
+                System.out.println("Customer has redeemed successfully.");
+            } else {
+                System.out.println("Customer could not redeem successfully.");
+            }
+            statement.close();
+            RewardActivity.rewardActivityUI();
+        } catch (SQLException e) {
+            Utility.close(statement);
+            System.out.println("Customer could not redeem successfully.");
+            RewardActivity.rewardActivityUI();
+        }
+    }
+
     public static void getAvailableBrands() {
+        availableBrandIds.clear();
+
         String customerId = Login.loggedInUserId;
-        String sql = "select BRANDID from ENROLLP JOIN LOYALTYPROGRAM USING (LPCODE) where CUSTOMERID =  '" + customerId + "' AND ISVALID = 1";
+        String sql = "select BRANDID, LPNAME from ENROLLP JOIN LOYALTYPROGRAM USING (LPCODE) where CUSTOMERID =  '" + customerId + "' AND ISVALID = 1 " +
+                "AND BRANDID IN (SELECT BRANDID FROM BRANDREWARDTYPE WHERE CURQUANTITY > 0)";
 
         ResultSet rs = null;
         try {
             rs = Home.statement.executeQuery(sql);
             while (rs.next()) {
                 availableBrandIds.add(rs.getString("BRANDID"));
+                availableLP.add(rs.getString("LPNAME"));
             }
             rs.close();
         } catch (SQLException e) {
@@ -92,24 +141,25 @@ public class RedeemPoints {
     }
 
     public static void getAvailableRewards(String brandId) {
-        String sql = "select SUM(POINTSEARNED) from WALLETRE where CUSTOMERID =  '" + Login.loggedInUserId + "' AND BID = '" + brandId + "'";
-        ResultSet rs = null;
-        try {
-            rs = Home.statement.executeQuery(sql);
-            if (rs.next()) {
-                rewardPoints = rs.getInt("SUM(POINTSEARNED)");
-            }
-            rs.close();
-        } catch (SQLException e) {
-            Utility.close(rs);
-            e.printStackTrace();
-        }
+        availableRewardIds.clear();
+        availableRewardNames.clear();
+        availableLP.clear();
 
-        sql = "select REWARDCODE from RRRULE ORDER BY VERSIONNO DESC where BRANDID = '" + brandId + "' AND POINTS <= '" + rewardPoints + "'";
+        rewardPoints = getRewardPoints(brandId);
+        System.out.println("You have " + rewardPoints + " reward points.");
+
+        ResultSet rs = null;
+
+        String sql = "SELECT R1.REWARDCODE RCODE, RE.REWARDNAME RNAME from RRRULE R1 \n" +
+                "INNER JOIN REWARDTYPE RE\n" +
+                "ON R1.REWARDCODE = RE.REWARDCODE\n" +
+                "where R1.BRANDID = '" + brandId + "' AND R1.POINTS <= " + rewardPoints + "\n" +
+                "AND R1.VERSIONNO = (SELECT MAX(R2.VERSIONNO) FROM RRRULE R2 WHERE  R1.BRANDID =  R2.BRANDID AND R1.REWARDCODE = R2.REWARDCODE)";
         try {
             rs = Home.statement.executeQuery(sql);
             while (rs.next()) {
-                availableRewardIds.add(rs.getString("REWARDCODE"));
+                availableRewardIds.add(rs.getString("RCODE"));
+                availableRewardNames.add(rs.getString("RNAME"));
             }
             rs.close();
         } catch (SQLException e) {
@@ -118,21 +168,22 @@ public class RedeemPoints {
         }
     }
 
-    public static void updateCustomerWalletRR(String rewardId, int reedemedPoints, String brandId) {
+    private static int getRewardPoints(String brandId) {
+        int rewardPoints = 0;
         CallableStatement statement = null;
         try {
-            statement = Home.connection.prepareCall("{call update_customer_wallet_rr(?, ?, ?, ?)}");
+            statement = Home.connection.prepareCall("{call customer_reward_points(?, ?, ?)}");
             statement.setString(1, Login.loggedInUserId);
             statement.setString(2, brandId);
-            statement.setString(3, rewardId);
-            statement.setString(4, String.valueOf(reedemedPoints));
+            statement.registerOutParameter(3, Types.INTEGER);
 
             statement.execute();
+            rewardPoints = statement.getInt(3);
             statement.close();
         } catch (SQLException e) {
             Utility.close(statement);
-            System.out.println("Customer Wallet RR can not be updated. Please try again.");
-            RewardActivity.rewardActivityUI();
         }
+
+        return rewardPoints;
     }
 }

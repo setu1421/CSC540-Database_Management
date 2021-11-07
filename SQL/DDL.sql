@@ -770,3 +770,60 @@ BEGIN
     WHERE CUSTOMERID = custId AND LPCODE = lCode;
 END;
 /
+
+create or replace PROCEDURE customer_reward_points
+(
+    custId IN VARCHAR2,
+    brandId IN VARCHAR2,
+    ret OUT NUMBER
+) 
+AS
+earningPoints NUMBER;
+redeemedPoint NUMBER;
+BEGIN
+    SELECT NVL(SUM(NVL(POINTSEARNED, 0)), 0) INTO earningPoints FROM WALLETRE WHERE CUSTOMERID = custId AND BID = brandId; 
+    SELECT NVL(SUM(NVL(POINTSREEDEMED, 0)), 0) INTO redeemedPoint FROM WALLETRR WHERE CUSTOMERID = custId AND BID = brandId;
+    
+    ret := earningPoints - redeemedPoint;
+END;
+/
+
+-- customer redeem
+create or replace PROCEDURE customer_redeem
+(
+    custId IN VARCHAR2,
+    bId IN VARCHAR2,
+    lCode IN VARCHAR,
+    rrCode IN VARCHAR,
+    quantity IN NUMBER,
+    custCurrPoints IN NUMBER,
+    ret OUT INT
+) 
+AS
+totalPointsReq NUMBER;
+pointsRemained NUMBER;
+RulePoints NUMBER;
+DATE_OF_ACT DATE;
+BEGIN
+    SELECT CURRENT_DATE INTO DATE_OF_ACT FROM DUAL;
+
+    SELECT POINTS INTO RulePoints FROM RRRULE where REWARDCODE = rrCode AND BRANDID = bId
+       AND VERSIONNO = (SELECT MAX(VERSIONNO) FROM RRRULE where REWARDCODE = rrCode AND BRANDID = bId);
+    
+    totalPointsReq :=  RulePoints * quantity; 
+    
+    IF custCurrPoints >= totalPointsReq THEN
+        INSERT INTO REDEEM(REWARDCODE, CUSTOMERID, BID, QUANTITY) VALUES(rrCode, custId, bId, quantity);
+        
+        FOR l_counter IN 1..quantity
+        LOOP
+            INSERT INTO WALLETRR(CUSTOMERID, BID, REWARDCODE, POINTSREEDEMED, USED, DATEOFACTIVITY) 
+            VALUES(custId, bId, rrCode, RulePoints, 0, DATE_OF_ACT);
+        END LOOP;
+        
+        ret := 1;
+    ELSE
+        ret := 0;
+    END IF;
+END;
+/

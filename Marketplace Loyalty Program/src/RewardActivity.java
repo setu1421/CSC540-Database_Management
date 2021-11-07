@@ -26,7 +26,7 @@ public class RewardActivity {
 
         Scanner sc = new Scanner(System.in);
         int lpOption, selection;
-        String lpCode, lpName;
+        String lpCode;
         boolean flag = false;
 
         if (joinedLPCodes.size() == 0) {
@@ -46,7 +46,6 @@ public class RewardActivity {
 
             if (lpOption >= 1 && lpOption <= joinedLPCodes.size()) {
                 lpCode = joinedLPCodes.get(lpOption - 1);
-                lpName = lpCodeNameMap.get(lpCode);
 
                 getLPActivityTypes(lpCode);
 
