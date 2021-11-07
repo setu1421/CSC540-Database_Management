@@ -19,35 +19,46 @@ public class RedeemPoints {
         Scanner sc = new Scanner(System.in);
         boolean flag = false;
 
-        System.out.println("Choose the brand to Redeem Points");
-        for (int i=0; i<availableBrandIds.size(); i++) {
-            System.out.println((i+1) + ". " + availableBrandIds.get(i));
-        }
-        System.out.print("Enter your option:");
-        int brandOption = sc.nextInt();
-        String brandId = availableBrandIds.get(brandOption-1);
-
-        getAvailableRewards(brandId);
-
-        System.out.println("Choose the Reward to redeem");
-        for (int i=0; i<availableRewardIds.size(); i++) {
-            System.out.println((i+1) + ". " + availableRewardIds.get(i));
-        }
-        System.out.print("Enter your option:");
-        int rewardOption = sc.nextInt();
-        String rewardId = availableRewardIds.get(rewardOption-1);
-
-        System.out.print("Enter Quantity:");
-        int rewardQty = sc.nextInt();
-        int redeemedPoints = rewardQty * rewardPoints;
-
-        int selection = Utility.chooseAddMenu(sc, "Rewards Selection");
-        if (selection == 2) {
-            Customer.customerUI();
-        } else {
-            updateRedeemAndCustomerWalletRR(rewardId, redeemedPoints, brandId, rewardQty);
-            redeemPointsUI();
-        }
+        do {
+            System.out.println("Choose the brand to Redeem Points");
+            for (int i=0; i<availableBrandIds.size(); i++) {
+                System.out.println((i+1) + ". " + availableBrandIds.get(i));
+            }
+            System.out.print("Enter your option:");
+            int brandOption = sc.nextInt();
+            if (brandOption >=1 && brandOption <=availableBrandIds.size()) {
+                flag = true;
+                String brandId = availableBrandIds.get(brandOption-1);
+                getAvailableRewards(brandId);
+                boolean innerFlag = false;
+                do {
+                    System.out.println("Choose the Reward to redeem");
+                    for (int i=0; i<availableRewardIds.size(); i++) {
+                        System.out.println((i+1) + ". " + availableRewardIds.get(i));
+                    }
+                    System.out.print("Enter your option:");
+                    int rewardOption = sc.nextInt();
+                    if (rewardOption >=1 && rewardOption <=availableRewardIds.size()) {
+                        innerFlag = true;
+                        String rewardId = availableRewardIds.get(rewardOption-1);
+                        System.out.print("Enter Quantity:");
+                        int rewardQty = sc.nextInt();
+                        int redeemedPoints = rewardQty * rewardPoints;
+                        int selection = Utility.chooseAddMenu(sc, "Rewards Selection");
+                        if (selection == 2) {
+                            Customer.customerUI();
+                        } else {
+                            updateRedeemAndCustomerWalletRR(rewardId, redeemedPoints, brandId, rewardQty);
+                            redeemPointsUI();
+                        }
+                    } else {
+                        System.out.println("Please choose valid reward option.");
+                    }
+                } while (!innerFlag);
+            } else {
+                System.out.println("Please choose valid Brand option.");
+            }
+        } while(!flag);
     }
 
     public static void getAvailableBrands() {
