@@ -263,6 +263,29 @@ BEGIN
 END;
 /
 
+-- Retrieves point multilier for tier program
+CREATE or REPLACE FUNCTION get_points_multiplier
+(
+custId IN VARCHAR2,
+lCode IN VARCHAR2
+)
+RETURN NUMBER
+IS
+pointsEarned NUMBER(20);
+pointsMultiplier NUMBER(5);
+BEGIN
+    SELECT POINTSEARNED INTO pointsEarned FROM ENROLLP WHERE CUSTOMERID = custId AND LPCODE = lCode;  
+    SELECT MULTIPLIER INTO pointsMultiplier
+    FROM
+    (
+        SELECT MULTIPLIER FROM TIER WHERE LPCODE = 'TLP01' AND POINTSEARNED >= POINTS ORDER BY POINTS DESC
+    ) TEMP
+    WHERE ROWNUM = 1;
+    
+    RETURN pointsMultiplier;
+END;
+/
+
 
 CREATE OR REPLACE FUNCTION show_query_1 
   RETURN customer_table_type PIPELINED AS
@@ -598,5 +621,61 @@ BEGIN
         UPDATE LOYALTYPROGRAM SET ISVALID = 1 WHERE BRANDID = bId;
         ret := 3;
     END IF;    
+END;
+/
+
+-- Customer purchase activity
+create or replace PROCEDURE customer_add_purchase
+(
+    custId IN VARCHAR2,
+    bId IN VARCHAR2,
+    lCode IN VARCHAR2,
+    acCode IN VARCHAR2,
+    isGCUsed IN NUMBER
+) 
+AS
+RulePoints NUMBER(10);
+LType VARCHAR2(1);
+pointsMultiplier NUMBER(5);
+totalPoints NUMBER(10);
+TodayDate DATE;
+BEGIN
+   -- Get today's date
+   SELECT CURRENT_DATE INTO TodayDate FROM DUAL;
+    -- Insert into purchase table
+    INSERT INTO PURCHASE(CUSTOMERID, BID, GCUSED) VALUES(custId, bId, isGCUsed);
+    
+    IF isGCUsed = 1 THEN
+        -- Make the gift card used
+        UPDATE WALLETRR SET USED = 1 
+        WHERE ser = (SELECT ser
+        FROM WALLETRR
+        WHERE CUSTOMERID = custId AND BID = bId AND USED = 0 AND ROWNUM = 1);
+        
+        totalPoints := 0;
+    ELSE
+        -- Get points from RE rule
+        SELECT POINTS INTO RulePoints FROM RERULE where ACTIVITYCODE = acCode AND BRANDID = bId 
+           AND VERSIONNO = (SELECT MAX(VERSIONNO) FROM RERULE where ACTIVITYCODE = acCode AND BRANDID = bId);
+        -- Get Tier Type
+        SELECT LPTYPE INTO LType FROM LOYALTYPROGRAM WHERE LPCODE = lCode;
+        
+        IF LType = 'T' THEN
+           pointsMultiplier := get_points_multiplier(custId, lCode);
+        ELSE
+           pointsMultiplier := 1;
+        END IF;
+        
+        totalPoints := pointsMultiplier * RulePoints;
+     END IF;   
+    
+    -- Insert into WALLETRE table
+    INSERT INTO WALLETRE(CUSTOMERID, BID, ACTIVITYCODE, POINTSEARNED, DATEOFACTIVITY) 
+    VALUES(custId, bId, acCode, totalPoints, TodayDate);
+    
+    -- Update ENROLLP table
+    UPDATE ENROLLP 
+    SET POINTSEARNED = POINTSEARNED + totalPoints 
+    WHERE CUSTOMERID = custId AND LPCODE = lCode;
 END;
 /
