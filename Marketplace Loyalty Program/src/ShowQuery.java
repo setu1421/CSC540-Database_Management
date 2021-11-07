@@ -226,7 +226,7 @@ public class ShowQuery {
             }
 
             if (count == 0) {
-                System.out.println("No Loyalty Program Found.");
+                System.out.println("No Activity Code Found.");
             }
 
             rs.close();
@@ -240,65 +240,113 @@ public class ShowQuery {
     }
 
     private static void query6() {
-        String sqlCred = "SELECT * FROM TABLE(show_query_6)";
+        int count = 0;
+        String sqlCred = "SELECT E.CUSTOMERID AS CUSID, C.FNAME FNAME, C.LNAME LNAME\n" +
+                "FROM ENROLLP E\n" +
+                "INNER JOIN LOYALTYPROGRAM L\n" +
+                "ON E.LPCODE = L.LPCODE\n" +
+                "INNER JOIN CUSTOMER C\n" +
+                "ON C.CUSTOMERID = E.CUSTOMERID\n" +
+                "WHERE L.BRANDID = 'Brand01' \n" +
+                "AND 2 <= (SELECT COUNT(WR.SER) FROM WALLETRR WR WHERE WR.BID = 'Brand01' AND WR.CUSTOMERID = E.CUSTOMERID)";
 
         ResultSet rs = null;
         try {
             rs = Home.statement.executeQuery(sqlCred);
-            if (rs.next()) {
-                while (rs.next()) {
-                    //TODO
-                }
-            } else {
+            while (rs.next()) {
+                System.out.println("Customer ID: " + rs.getString("CUSID"));
+                System.out.println("Customer First Name: " + rs.getString("FNAME"));
+                System.out.println("Customer Last Name: " + rs.getString("LNAME"));
+                System.out.println();
+                count++;
+            }
+
+            if (count == 0) {
                 System.out.println("No Customer Found.");
             }
 
             rs.close();
-        } catch (SQLException e) {
+        } catch (
+                SQLException e) {
             Utility.close(rs);
             e.printStackTrace();
         }
+
+        showQueryUI();
     }
 
     private static void query7() {
-        String sqlCred = "SELECT * FROM TABLE(show_query_7)";
+        int count = 0;
+        String sqlCred = "SELECT WR.BID BRANDID, B.BNAME BRANDNAME, SUM(POINTSREEDEMED) TOTPOINTS\n" +
+                "FROM WALLETRR WR\n" +
+                "INNER JOIN BRAND B\n" +
+                "ON B.BID = WR.BID\n" +
+                "GROUP BY WR.BID, B.BNAME\n" +
+                "HAVING SUM(POINTSREEDEMED) < 500";
 
         ResultSet rs = null;
         try {
             rs = Home.statement.executeQuery(sqlCred);
-            if (rs.next()) {
-                while (rs.next()) {
-                    //TODO
-                }
-            } else {
+            while (rs.next()) {
+                System.out.println("Brand ID: " + rs.getString("BRANDID"));
+                System.out.println("Brand Name: " + rs.getString("BRANDNAME"));
+                System.out.println("Points Redeemed: " + rs.getString("TOTPOINTS"));
+                System.out.println();
+                count++;
+            }
+
+            if (count == 0) {
                 System.out.println("No Brand Found.");
             }
 
             rs.close();
-        } catch (SQLException e) {
+        } catch (
+                SQLException e) {
             Utility.close(rs);
             e.printStackTrace();
         }
+
+        showQueryUI();
     }
 
     private static void query8() {
-        String sqlCred = "SELECT * FROM TABLE(show_query_8)";
+        int count = 0;
+        String sqlCred = "SELECT COUNT(SER) AS CNT\n" +
+                "FROM\n" +
+                "(\n" +
+                "SELECT SER\n" +
+                "FROM WALLETRE\n" +
+                "WHERE CUSTOMERID = 'C0003' AND BID = 'Brand02' \n" +
+                "AND DATEOFACTIVITY BETWEEN TO_DATE('01/08/2021', 'DD/MM/YYYY') AND TO_DATE('30/09/2021', 'DD/MM/YYYY')\n" +
+                "\n" +
+                "UNION\n" +
+                "\n" +
+                "SELECT SER \n" +
+                "FROM WALLETRR\n" +
+                "WHERE CUSTOMERID = 'C0003' AND BID = 'Brand02' \n" +
+                "AND DATEOFACTIVITY BETWEEN TO_DATE('01/08/2021', 'DD/MM/YYYY') AND TO_DATE('30/09/2021', 'DD/MM/YYYY')\n" +
+                ")";
 
         ResultSet rs = null;
         try {
             rs = Home.statement.executeQuery(sqlCred);
-            if (rs.next()) {
-                while (rs.next()) {
-                    //TODO
-                }
-            } else {
-                System.out.println("No Activity Found.");
+            while (rs.next()) {
+                System.out.println("Total Activities: " + rs.getInt("CNT"));
+                System.out.println();
+                count++;
+            }
+
+            if (count == 0) {
+                System.out.println("No Activities Found.");
             }
 
             rs.close();
-        } catch (SQLException e) {
+        } catch (
+                SQLException e) {
             Utility.close(rs);
             e.printStackTrace();
         }
+
+        showQueryUI();
     }
 }
