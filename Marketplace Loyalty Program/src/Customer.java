@@ -65,7 +65,7 @@ public class Customer {
 
     public static void enrollLoyaltyProgram() {
         if (availableLPCodes.size() == 0) {
-            System.out.println("No Loyalty Program is available.");
+            System.out.println("No Loyalty Program is available to enroll.");
             customerUI();
         } else {
             System.out.println("Choose any of the loyalty programs available for you");

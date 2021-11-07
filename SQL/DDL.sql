@@ -222,14 +222,14 @@ CREATE TABLE REFERFRIEND(
 
 ---------------------------------User Define Types--------------------------------------
 
-CREATE TYPE customer_type as OBJECT (
+CREATE OR REPLACE TYPE customer_type as OBJECT (
   CUSTID VARCHAR(50),
   CUSTFNAME VARCHAR(50),
   CUSTLNAME VARCHAR(50)
 );
 /
 
-CREATE TYPE customer_table_type as TABLE OF customer_type;
+CREATE OR REPLACE TYPE customer_table_type as TABLE OF customer_type;
 /
 
 
