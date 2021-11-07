@@ -17,11 +17,9 @@ public class RedeemPoints {
     public static void redeemPointsUI() {
         getAvailableBrands();
         Scanner sc = new Scanner(System.in);
-        int selection;
         boolean flag = false;
 
         System.out.println("Choose the brand to Redeem Points");
-
         for (int i=0; i<availableBrandIds.size(); i++) {
             System.out.println((i+1) + ". " + availableBrandIds.get(i));
         }
@@ -32,7 +30,6 @@ public class RedeemPoints {
         getAvailableRewards(brandId);
 
         System.out.println("Choose the Reward to redeem");
-
         for (int i=0; i<availableRewardIds.size(); i++) {
             System.out.println((i+1) + ". " + availableRewardIds.get(i));
         }
@@ -42,36 +39,15 @@ public class RedeemPoints {
 
         System.out.print("Enter Quantity:");
         int rewardQty = sc.nextInt();
-        int reedemedPoints = rewardQty * rewardPoints;
+        int redeemedPoints = rewardQty * rewardPoints;
 
-        do {
-            System.out.println("Choose what operation you want to perform");
-            System.out.println("1. Rewards Selection");
-            System.out.println("2. Go Back");
-            System.out.print("Enter your option:");
-
-            try {
-                selection = sc.nextInt();
-                flag = true;
-
-                switch (selection) {
-                    case 1:
-                        updateCustomerWalletRR(rewardId, reedemedPoints, brandId);
-                        redeemPointsUI();
-                        break;
-                    case 2:
-                        Customer.customerUI();
-                        break;
-                    default:
-                        System.out.println("You have entered a wrong option. Please choose again.");
-                        flag = false;
-                }
-
-            } catch (Exception e) {
-                System.out.println("Please choose between 1 and 2. Please choose again.");
-                sc.next();
-            }
-        } while (!flag);
+        int selection = Utility.chooseAddMenu(sc, "Rewards Selection");
+        if (selection == 2) {
+            Customer.customerUI();
+        } else {
+            updateRedeemAndCustomerWalletRR(rewardId, redeemedPoints, brandId, rewardQty);
+            redeemPointsUI();
+        }
     }
 
     public static void getAvailableBrands() {
@@ -118,14 +94,15 @@ public class RedeemPoints {
         }
     }
 
-    public static void updateCustomerWalletRR(String rewardId, int reedemedPoints, String brandId) {
+    public static void updateRedeemAndCustomerWalletRR(String rewardId, int redeemedPoints, String brandId, int rewardQty) {
         CallableStatement statement = null;
         try {
-            statement = Home.connection.prepareCall("{call update_customer_wallet_rr(?, ?, ?, ?)}");
+            statement = Home.connection.prepareCall("{call update_redeem_and_customer_wallet_rr(?, ?, ?, ?)}");
             statement.setString(1, Login.loggedInUserId);
             statement.setString(2, brandId);
             statement.setString(3, rewardId);
-            statement.setString(4, String.valueOf(reedemedPoints));
+            statement.setString(4, String.valueOf(redeemedPoints));
+            statement.setString(5, String.valueOf(rewardQty));
 
             statement.execute();
             statement.close();

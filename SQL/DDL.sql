@@ -465,6 +465,31 @@ BEGIN
 END;
 /
 
+-- add customer review
+CREATE or REPLACE PROCEDURE customer_add_review
+(
+	customerId IN VARCHAR2,
+	brandId IN VARCHAR2,
+    reviewText IN VARCHAR2,
+	activityCode IN VARCHAR2,
+	pointsEarned IN VARCHAR2
+) 
+AS
+POINTS_EARNED FLOAT(10);
+DATE_OF_ACTIVITY DATE;
+BEGIN
+	SELECT CURRENT_DATE INTO DATE_OF_ACTIVITY FROM DUAL;
+	
+	SELECT POINTS INTO POINTS_EARNED FROM RERULE WHERE BRANDID = brandId AND ACTIVITYCODE = activityCode AND 
+		VERSIONNO = (SELECT MAX(VERSIONNO) FROM RERULE WHERE BRANDID = brandId AND ACTIVITYCODE = activityCode);
+	-- Insert into review table
+	INSERT INTO REVIEW(CUSTOMERID, BID, REVIEWTEXT) VALUES (customerId, brandId, reviewText);
+	-- Insert into wallet re table
+	INSERT INTO WALLETRE(CUSTOMERID, BRANDID, ACTIVITYCODE, POINTSEARNED, DATEOFACTIVITY) VALUES(customerId, brandId, activityCode, POINTS_EARNED, DATE_OF_ACTIVITY);      
+END;
+/
+
+
 -- update customer wallet RE
 CREATE or REPLACE PROCEDURE update_customer_wallet_re
 (
@@ -483,19 +508,21 @@ END;
 /
 
 -- update customer wallet RR
-CREATE or REPLACE PROCEDURE update_customer_wallet_rr
+CREATE or REPLACE PROCEDURE update_redeem_and_customer_wallet_rr
 (
     customerId IN VARCHAR2,
 	bId IN VARCHAR2,
     rewardCode IN VARCHAR2,
-	pointsRedeemed IN VARCHAR2
+	pointsRedeemed IN VARCHAR2,
+	quantity IN VARCHAR2
 ) 
 AS
 DATE_OF_ACTIVITY DATE;
 BEGIN
 	SELECT CURRENT_DATE INTO DATE_OF_ACTIVITY FROM DUAL;
 	-- Insert into customer walletre table
-	INSERT INTO WALLETRR(CUSTOMERID, BID, REWARDCODE, POINTSREEDEMED, DATEOFACTIVITY) VALUES(customerId, bId, rewardCode, pointsRedeemed, DATE_OF_ACTIVITY);      
+	INSERT INTO WALLETRR(CUSTOMERID, BID, REWARDCODE, POINTSREEDEMED, DATEOFACTIVITY) VALUES(customerId, bId, rewardCode, pointsRedeemed, DATE_OF_ACTIVITY);
+	INSERT INTO REDEEM(REWARDCODE, CUSTOMERID, BID, QUANTITY) VALUES(rewardCode, customerId, bId, quantity)
 END;
 /
 
