@@ -71,7 +71,16 @@ public class ShowQuery {
 
     private static void query1() {
         int count = 0;
-        String sqlCred = "SELECT * FROM TABLE(show_query_1)";
+        String sqlCred = "SELECT OC.CUSTOMERID CUSTID, OC.FNAME CUSTFNAME, OC.LNAME CUSTLNAME\n" +
+                "FROM CUSTOMER OC\n" +
+                "WHERE OC.CUSTOMERID NOT IN (\n" +
+                "SELECT C.CUSTOMERID\n" +
+                "FROM CUSTOMER C\n" +
+                "INNER JOIN ENROLLP E\n" +
+                "ON E.CUSTOMERID = C.CUSTOMERID\n" +
+                "INNER JOIN LOYALTYPROGRAM L\n" +
+                "ON L.LPCODE = E.LPCODE\n" +
+                "WHERE L.BRANDID = 'Brand02');";
 
         ResultSet rs = null;
         try {
@@ -99,87 +108,135 @@ public class ShowQuery {
     }
 
     private static void query2() {
-        String sqlCred = "SELECT * FROM TABLE(show_query_2)";
+        int count = 0;
+        String sqlCred = "SELECT E.CUSTOMERID CUSTID, E.LPCODE LCODE\n" +
+                "FROM ENROLLP E\n" +
+                "INNER JOIN LOYALTYPROGRAM L\n" +
+                "ON E.LPCODE = L.LPCODE\n" +
+                "WHERE NOT EXISTS (SELECT SER FROM WALLETRE WE WHERE WE.CUSTOMERID = E.CUSTOMERID AND WE.BID = L.BRANDID)\n" +
+                "AND NOT EXISTS (SELECT SER FROM WALLETRR WR WHERE WR.CUSTOMERID = E.CUSTOMERID AND WR.BID = L.BRANDID)\n" +
+                "ORDER BY E.CUSTOMERID";
 
         ResultSet rs = null;
         try {
             rs = Home.statement.executeQuery(sqlCred);
-            if (rs.next()) {
-                while (rs.next()) {
-                    //TODO
-                }
-            } else {
+            while (rs.next()) {
+                System.out.println("Customer ID: " + rs.getString("CUSTID"));
+                System.out.println("Loyalty Program ID: " + rs.getString("LCODE"));
+                System.out.println();
+                count++;
+            }
+
+            if (count == 0) {
                 System.out.println("No Customer Found.");
             }
 
             rs.close();
-        } catch (SQLException e) {
+        } catch (
+                SQLException e) {
             Utility.close(rs);
             e.printStackTrace();
         }
+
+        showQueryUI();
     }
 
     private static void query3() {
-        String sqlCred = "SELECT * FROM TABLE(show_query_3)";
+        int count = 0;
+        String sqlCred = "SELECT R.REWARDCODE RCODE, R.REWARDNAME RNAME\n" +
+                "FROM BRANDREWARDTYPE BR \n" +
+                "INNER JOIN REWARDTYPE R\n" +
+                "ON R.REWARDCODE = BR.REWARDCODE\n" +
+                "WHERE BR.BRANDID = 'Brand01'";
 
         ResultSet rs = null;
         try {
             rs = Home.statement.executeQuery(sqlCred);
-            if (rs.next()) {
-                while (rs.next()) {
-                    //TODO
-                }
-            } else {
+            while (rs.next()) {
+                System.out.println("Reward Code: " + rs.getString("RCODE"));
+                System.out.println("Reward Name: " + rs.getString("RNAME"));
+                System.out.println();
+                count++;
+            }
+
+            if (count == 0) {
                 System.out.println("No Reward Found.");
             }
 
             rs.close();
-        } catch (SQLException e) {
+        } catch (
+                SQLException e) {
             Utility.close(rs);
             e.printStackTrace();
         }
+
+        showQueryUI();
     }
 
     private static void query4() {
-        String sqlCred = "SELECT * FROM TABLE(show_query_4)";
+        int count = 0;
+        String sqlCred = "SELECT L.LPCODE LCODE, L.LPNAME LNAME\n" +
+                "FROM LOYALTYPROGRAM L\n" +
+                "WHERE EXISTS (SELECT RE.BRANDID FROM RERULE RE WHERE RE.BRANDID = L.BRANDID AND RE.ACTIVITYCODE = 'A03')";
 
         ResultSet rs = null;
         try {
             rs = Home.statement.executeQuery(sqlCred);
-            if (rs.next()) {
-                while (rs.next()) {
-                    //TODO
-                }
-            } else {
+            while (rs.next()) {
+                System.out.println("Loyalty Program Code: " + rs.getString("LCODE"));
+                System.out.println("Loyalty Program Name: " + rs.getString("LNAME"));
+                System.out.println();
+                count++;
+            }
+
+            if (count == 0) {
                 System.out.println("No Loyalty Program Found.");
             }
 
             rs.close();
-        } catch (SQLException e) {
+        } catch (
+                SQLException e) {
             Utility.close(rs);
             e.printStackTrace();
         }
+
+        showQueryUI();
     }
 
     private static void query5() {
-        String sqlCred = "SELECT * FROM TABLE(show_query_5)";
+        int count = 0;
+        String sqlCred = "SELECT BA.ACTIVITYCODE ACODE, A.ACTIVITYNAME ANAME, COUNT(SER) CNT \n" +
+                "FROM BRANDACTIVITYTYPE BA\n" +
+                "INNER JOIN ACTIVITYTYPE A\n" +
+                "ON A.ACTIVITYCODE = BA.ACTIVITYCODE\n" +
+                "INNER JOIN WALLETRE WE\n" +
+                "ON WE.BID = BA.BRANDID AND BA.ACTIVITYCODE = WE.ACTIVITYCODE\n" +
+                "WHERE BA.BRANDID = 'Brand01'\n" +
+                "GROUP BY BA.ACTIVITYCODE, A.ACTIVITYNAME";
 
         ResultSet rs = null;
         try {
             rs = Home.statement.executeQuery(sqlCred);
-            if (rs.next()) {
-                while (rs.next()) {
-                    //TODO
-                }
-            } else {
-                System.out.println("No Activity Type Found.");
+            while (rs.next()) {
+                System.out.println("Activity Code: " + rs.getString("ACODE"));
+                System.out.println("Activity Name: " + rs.getString("ANAME"));
+                System.out.println("No. of Instances: " + rs.getString("CNT"));
+                System.out.println();
+                count++;
+            }
+
+            if (count == 0) {
+                System.out.println("No Loyalty Program Found.");
             }
 
             rs.close();
-        } catch (SQLException e) {
+        } catch (
+                SQLException e) {
             Utility.close(rs);
             e.printStackTrace();
         }
+
+        showQueryUI();
     }
 
     private static void query6() {
