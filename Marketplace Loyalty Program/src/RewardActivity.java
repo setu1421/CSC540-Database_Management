@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 /**
  * @author Md Mirajul Islam (mislam22)
+ * @author Setu Kumar Basak (sbasak4)
  */
 
 public class RewardActivity {
@@ -71,11 +72,11 @@ public class RewardActivity {
                             case "Purchase":
                                 Purchase.purchaseUI(lpBrandMap.get(lpCode), lpCode, lpActivityCodeNameMap.get("Purchase"));
                                 break;
-                            case "Leave a review":
-                                LeaveReview.leaveReviewUI(lpBrandMap.get(lpCode), lpCode, lpActivityCodeNameMap.get("Purchase"));
+                            case "Write a review":
+                                LeaveReview.leaveReviewUI(lpBrandMap.get(lpCode), lpCode, lpActivityCodeNameMap.get("Write a review"));
                                 break;
                             case "Refer a friend":
-                                ReferFriend.referFriendUI(lpBrandMap.get(lpCode), lpCode, lpActivityCodeNameMap.get("Purchase"));
+                                ReferFriend.referFriendUI(lpBrandMap.get(lpCode), lpCode, lpActivityCodeNameMap.get("Refer a friend"));
                                 break;
                             default:
                                 System.out.println("You have entered a wrong option. Please choose again.");
@@ -140,7 +141,7 @@ public class RewardActivity {
             rs = Home.statement.executeQuery(sql);
             while (rs.next()) {
                 lpActivityTypes.add(rs.getString("ACTIVITYNAME"));
-                lpActivityCodeNameMap.put(rs.getString("ACTIVITYCODE"), rs.getString("ACTIVITYNAME"));
+                lpActivityCodeNameMap.put(rs.getString("ACTIVITYNAME"), rs.getString("ACTIVITYCODE"));
                 lpBrandMap.put(lpCode, rs.getString("BRANDID"));
             }
             rs.close();

@@ -18,7 +18,7 @@ public class LeaveReview {
 
         do {
             flag = true;
-            System.out.println("Enter your review:");
+            System.out.print("Enter your review:");
             review = sc.nextLine();
 
             if (review.trim().isEmpty()) {
@@ -34,11 +34,12 @@ public class LeaveReview {
             } else {
                 CallableStatement statement = null;
                 try {
-                    statement = Home.connection.prepareCall("{call customer_add_review(?, ?, ?, ?)}");
+                    statement = Home.connection.prepareCall("{call customer_add_review(?, ?, ?, ?, ?)}");
                     statement.setString(1, Login.loggedInUserId);
                     statement.setString(2, brandId);
-                    statement.setString(3, review);
+                    statement.setString(3, lpCode);
                     statement.setString(4, activityCode);
+                    statement.setString(5, review);
 
                     statement.execute();
                     System.out.println("Review has been added successfully.");

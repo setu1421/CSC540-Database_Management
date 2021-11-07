@@ -7,7 +7,8 @@ BEGIN
                               'PACKAGE',
                               'PROCEDURE',
                               'FUNCTION',
-                              'SEQUENCE'
+                              'SEQUENCE',
+                              'TYPE'
                              ))
    LOOP
       BEGIN

@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class Purchase {
 
     public static void purchaseUI(String brandId, String lpCode, String activityCode) {
-        int giftCardCount = getGiftCardCount();
+        int giftCardCount = getGiftCardCount(brandId);
         int isGCUsed = 0;
 
         Scanner sc = new Scanner(System.in);
@@ -22,6 +22,7 @@ public class Purchase {
                 System.out.println("You have " + giftCardCount + " gift card. Do you want to use for purchase?");
                 System.out.println("1: Yes");
                 System.out.println("2: No");
+                System.out.print("Enter your option:");
 
                 int gcSelection = sc.nextInt();
 
@@ -34,6 +35,8 @@ public class Purchase {
                     flag = false;
                 }
             } while (!flag);
+        } else {
+            System.out.println("You have no gift card available. Please purchase without gift card.");
         }
 
         int selection = Utility.chooseAddMenu(sc, "Purchase");
@@ -62,8 +65,23 @@ public class Purchase {
         }
     }
 
-    private static int getGiftCardCount() {
+    private static int getGiftCardCount(String brandId) {
         int giftCardCount = 0;
+
+        String sql = "select COUNT(*) GIFTCOUNT FROM WALLETRR where CUSTOMERID =  '" + Login.loggedInUserId + "' AND BID = '" + brandId + "' AND USED = 0";
+
+        ResultSet rs = null;
+        try {
+            rs = Home.statement.executeQuery(sql);
+            if (rs.next()) {
+                giftCardCount = rs.getInt("GIFTCOUNT");
+            }
+
+            rs.close();
+        } catch (SQLException e) {
+            Utility.close(rs);
+            e.printStackTrace();
+        }
 
         return giftCardCount;
     }
