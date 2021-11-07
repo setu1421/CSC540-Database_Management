@@ -679,3 +679,48 @@ BEGIN
     WHERE CUSTOMERID = custId AND LPCODE = lCode;
 END;
 /
+
+create or replace PROCEDURE customer_add_review
+(
+    custId IN VARCHAR2,
+    bId IN VARCHAR2,
+    lCode IN VARCHAR2,
+    acCode IN VARCHAR2,
+    review_text IN VARCHAR2
+) 
+AS
+RulePoints NUMBER(10);
+LType VARCHAR2(1);
+pointsMultiplier NUMBER(5);
+totalPoints NUMBER(10);
+TodayDate DATE;
+BEGIN
+   -- Get today's date
+   SELECT CURRENT_DATE INTO TodayDate FROM DUAL;
+    -- Insert into review table
+    INSERT INTO REVIEW(REVIEWTEXT, CUSTOMERID, BID) VALUES(review_text, custId, bId);
+    
+    -- Get points from RE rule
+    SELECT POINTS INTO RulePoints FROM RERULE where ACTIVITYCODE = acCode AND BRANDID = bId 
+       AND VERSIONNO = (SELECT MAX(VERSIONNO) FROM RERULE where ACTIVITYCODE = acCode AND BRANDID = bId);
+    -- Get Tier Type
+    SELECT LPTYPE INTO LType FROM LOYALTYPROGRAM WHERE LPCODE = lCode;
+    
+    IF LType = 'T' THEN
+       pointsMultiplier := get_points_multiplier(custId, lCode);
+    ELSE
+       pointsMultiplier := 1;
+    END IF;
+    
+    totalPoints := pointsMultiplier * RulePoints;  
+    
+    -- Insert into WALLETRE table
+    INSERT INTO WALLETRE(CUSTOMERID, BID, ACTIVITYCODE, POINTSEARNED, DATEOFACTIVITY) 
+    VALUES(custId, bId, acCode, totalPoints, TodayDate);
+    
+    -- Update ENROLLP table
+    UPDATE ENROLLP 
+    SET POINTSEARNED = POINTSEARNED + totalPoints 
+    WHERE CUSTOMERID = custId AND LPCODE = lCode;
+END;
+/

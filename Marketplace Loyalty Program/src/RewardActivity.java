@@ -72,7 +72,7 @@ public class RewardActivity {
                             case "Purchase":
                                 Purchase.purchaseUI(lpBrandMap.get(lpCode), lpCode, lpActivityCodeNameMap.get("Purchase"));
                                 break;
-                            case "Leave a review":
+                            case "Write a review":
                                 LeaveReview.leaveReviewUI(lpBrandMap.get(lpCode), lpCode, lpActivityCodeNameMap.get("Write a review"));
                                 break;
                             case "Refer a friend":
