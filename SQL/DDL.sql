@@ -3,7 +3,7 @@ CREATE TABLE USERS(
     PASSWORD VARCHAR2(30) NOT NULL,
     USERTYPE CHAR(1) NOT NULL,
     CONSTRAINT pk_users primary key(USERID),
-	CONSTRAINT CON_USER CHECK(USERTYPE = 'C' OR USERTYPE = 'B' OR USERTYPE = 'A') 
+	CONSTRAINT CON_USER CHECK(USERTYPE = 'C' OR USERTYPE = 'B' OR USERTYPE = 'A')
 );
 /
 
@@ -135,18 +135,18 @@ CREATE TABLE ENROLLP(
     ENROLDATE DATE,
 	CONSTRAINT PK_ENROL PRIMARY KEY(CUSTOMERID, LPCODE),
 	CONSTRAINT FK_ENROL1 FOREIGN KEY (CUSTOMERID) REFERENCES CUSTOMER(CUSTOMERID) ON DELETE CASCADE,
-	CONSTRAINT FK_ENROL2 FOREIGN KEY (LPCODE) REFERENCES LOYALTYPROGRAM(LPCODE) ON DELETE CASCADE	
+	CONSTRAINT FK_ENROL2 FOREIGN KEY (LPCODE) REFERENCES LOYALTYPROGRAM(LPCODE) ON DELETE CASCADE
 );
 /
 
 
 CREATE TABLE WALLETRE(
-    SER NUMBER(10) GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1), 
+    SER NUMBER(10) GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
 	CUSTOMERID VARCHAR2(50),
 	BID VARCHAR2(50),
 	ACTIVITYCODE VARCHAR2(10),
-    POINTSEARNED FLOAT(10),
-	DATEOFACTIVITY DATE, 
+    POINTSEARNED NUMBER(10),
+	DATEOFACTIVITY DATE,
 	CONSTRAINT pk_wallet primary key(SER),
 	CONSTRAINT FK_WALLET1 FOREIGN KEY (BID) REFERENCES BRAND(BID),
 	CONSTRAINT FK_WALLET2 FOREIGN KEY (ACTIVITYCODE) REFERENCES ACTIVITYTYPE(ACTIVITYCODE),
@@ -155,11 +155,11 @@ CREATE TABLE WALLETRE(
 /
 
 CREATE TABLE WALLETRR(
-    SER NUMBER(10) GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1), 
+    SER NUMBER(10) GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
 	CUSTOMERID VARCHAR2(50),
 	BID VARCHAR2(50),
 	REWARDCODE VARCHAR2(10),
-    POINTSREEDEMED FLOAT(10),
+    POINTSREEDEMED NUMBER(10),
     USED NUMBER(1),
 	DATEOFACTIVITY DATE,
 	CONSTRAINT pk_walletRR primary key(SER),
@@ -171,19 +171,19 @@ CREATE TABLE WALLETRR(
 
 
 CREATE TABLE REVIEW(
-	REVIEWID NUMBER(10) GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1), 
+	REVIEWID NUMBER(10) GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
 	REVIEWTEXT VARCHAR2(200),
 	CUSTOMERID VARCHAR2(50),
     BID VARCHAR2(50),
 	CONSTRAINT PK_REVIEW PRIMARY KEY(REVIEWID),
-	CONSTRAINT FK_REVIEW FOREIGN KEY (CUSTOMERID) REFERENCES CUSTOMER(CUSTOMERID) ON DELETE CASCADE, 
+	CONSTRAINT FK_REVIEW FOREIGN KEY (CUSTOMERID) REFERENCES CUSTOMER(CUSTOMERID) ON DELETE CASCADE,
     CONSTRAINT FK_REVIEW_BID FOREIGN KEY (BID) REFERENCES BRAND(BID) ON DELETE CASCADE
 );
 /
 
 
 CREATE TABLE PURCHASE(
-	PURCHASEID NUMBER(10) GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1), 
+	PURCHASEID NUMBER(10) GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
 	CUSTOMERID VARCHAR2(50),
 	BID VARCHAR2(50),
 	GCUSED NUMBER(1),
@@ -196,7 +196,7 @@ CREATE TABLE PURCHASE(
 
 
 CREATE TABLE REDEEM(
-	REDEEMID NUMBER(10) GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1), 
+	REDEEMID NUMBER(10) GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
 	REWARDCODE VARCHAR2(10),
 	CUSTOMERID VARCHAR2(50),
     BID VARCHAR2(50),
@@ -211,11 +211,11 @@ CREATE TABLE REDEEM(
 
 
 CREATE TABLE REFERFRIEND(
-    RFID NUMBER(10) GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1), 
+    RFID NUMBER(10) GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
     CUSTOMERID VARCHAR2(50), --REFERRER ID
     BID VARCHAR2(50),
     CONSTRAINT PK_REFERFRIEND PRIMARY KEY(RFID),
-	CONSTRAINT FK_REFERFRIEND_CUSTOMERID FOREIGN KEY (CUSTOMERID) REFERENCES CUSTOMER(CUSTOMERID), 
+	CONSTRAINT FK_REFERFRIEND_CUSTOMERID FOREIGN KEY (CUSTOMERID) REFERENCES CUSTOMER(CUSTOMERID),
     CONSTRAINT FK_REFERFRIEND_BID FOREIGN KEY (BID) REFERENCES BRAND(BID) ON DELETE CASCADE
 );
 /
@@ -274,26 +274,26 @@ IS
 pointsEarned NUMBER(20);
 pointsMultiplier NUMBER(5);
 BEGIN
-    SELECT POINTSEARNED INTO pointsEarned FROM ENROLLP WHERE CUSTOMERID = custId AND LPCODE = lCode;  
+    SELECT POINTSEARNED INTO pointsEarned FROM ENROLLP WHERE CUSTOMERID = custId AND LPCODE = lCode;
     SELECT MULTIPLIER INTO pointsMultiplier
     FROM
     (
         SELECT MULTIPLIER FROM TIER WHERE LPCODE = 'TLP01' AND POINTSEARNED >= POINTS ORDER BY POINTS DESC
     ) TEMP
     WHERE ROWNUM = 1;
-    
+
     RETURN pointsMultiplier;
 END;
 /
 
 
-CREATE OR REPLACE FUNCTION show_query_1 
+CREATE OR REPLACE FUNCTION show_query_1
   RETURN customer_table_type PIPELINED AS
 BEGIN
     FOR cur IN (SELECT CUSTOMERID, FNAME, LNAME FROM CUSTOMER)
     LOOP
-      PIPE ROW(customer_type(cur.CUSTOMERID, cur.FNAME, cur.LNAME));   
-    END LOOP; 
+      PIPE ROW(customer_type(cur.CUSTOMERID, cur.FNAME, cur.LNAME));
+    END LOOP;
     RETURN;
 END;
 /
@@ -308,7 +308,7 @@ CREATE or REPLACE PROCEDURE admin_add_brand
     brandName IN VARCHAR2,
     brandAddress IN VARCHAR2,
     ret OUT INT
-) 
+)
 AS
 OLDUSERIDCNT INT;
 JOIN_DATE DATE;
@@ -325,7 +325,7 @@ BEGIN
         INSERT INTO BRAND(BID, BNAME, ADDRESS, JOINDATE) VALUES(brandId, brandName, brandAddress, JOIN_DATE);
 
         ret := 1;
-    END IF;    
+    END IF;
 END;
 /
 
@@ -336,9 +336,9 @@ CREATE or REPLACE PROCEDURE admin_add_customer
     customerFName IN VARCHAR2,
     customerLName IN VARCHAR2,
     customerPhoneNumber IN VARCHAR2,
-    customerAddress IN VARCHAR2, 
+    customerAddress IN VARCHAR2,
     ret OUT INT
-) 
+)
 AS
 OLDUSERIDCNT INT;
 BEGIN
@@ -352,7 +352,7 @@ BEGIN
         INSERT INTO CUSTOMER(CUSTOMERID, FNAME, LNAME, PHONENUMBER, ADDRESS) VALUES(customerId, customerFName, customerLName, customerPhoneNumber, customerAddress);
 
         ret := 1;
-    END IF;    
+    END IF;
 END;
 /
 
@@ -364,7 +364,7 @@ CREATE or REPLACE PROCEDURE add_brand
     brandName IN VARCHAR2,
     brandAddress IN VARCHAR2,
     ret OUT INT
-) 
+)
 AS
 OLDUSERIDCNT INT;
 JOIN_DATE DATE;
@@ -381,7 +381,7 @@ BEGIN
         INSERT INTO BRAND(BID, BNAME, ADDRESS, JOINDATE) VALUES(brandId, brandName, brandAddress, JOIN_DATE);
 
         ret := 1;
-    END IF;    
+    END IF;
 END;
 /
 
@@ -393,9 +393,9 @@ CREATE or REPLACE PROCEDURE add_customer
     customerFName IN VARCHAR2,
     customerLName IN VARCHAR2,
     customerPhoneNumber IN VARCHAR2,
-    customerAddress IN VARCHAR2, 
+    customerAddress IN VARCHAR2,
     ret OUT INT
-) 
+)
 AS
 OLDUSERIDCNT INT;
 BEGIN
@@ -409,7 +409,7 @@ BEGIN
         INSERT INTO CUSTOMER(CUSTOMERID, FNAME, LNAME, PHONENUMBER, ADDRESS) VALUES(customerId, customerFName, customerLName, customerPhoneNumber, customerAddress);
 
         ret := 1;
-    END IF;    
+    END IF;
 END;
 /
 
@@ -420,16 +420,16 @@ CREATE or REPLACE PROCEDURE enroll_brand_loyalty_program
     lpType IN VARCHAR2,
     brandId IN VARCHAR2,
     lpCode OUT VARCHAR2
-) 
+)
 AS
 BEGIN
         IF lpType = 'R' THEN
             lpCode := get_next_id('RLP');
-        ELSE 
+        ELSE
             lpCode := get_next_id('TLP');
-        END IF;    
+        END IF;
         -- Insert into loyalty program table
-        INSERT INTO LOYALTYPROGRAM(LPCODE, LPNAME, LPTYPE, ISVALID, BRANDID) VALUES(lpCode, lpName, lpType, 0, brandId);  
+        INSERT INTO LOYALTYPROGRAM(LPCODE, LPNAME, LPTYPE, ISVALID, BRANDID) VALUES(lpCode, lpName, lpType, 0, brandId);
 END;
 /
 
@@ -439,7 +439,7 @@ CREATE or REPLACE PROCEDURE enroll_customer_loyalty_program
     custId IN VARCHAR2,
 	lCode IN VARCHAR2,
 	ret OUT INT
-) 
+)
 AS
 OLDCUSTOMERIDCNT INT;
 JOIN_DATE DATE;
@@ -451,9 +451,9 @@ BEGIN
 	ELSE
        SELECT CURRENT_DATE INTO JOIN_DATE FROM DUAL;
         -- Insert into loyalty program table
-        INSERT INTO ENROLLP(CUSTOMERID, LPCODE, POINTSEARNED, ENROLDATE) VALUES(custId, lCode, 0, JOIN_DATE); 
+        INSERT INTO ENROLLP(CUSTOMERID, LPCODE, POINTSEARNED, ENROLDATE) VALUES(custId, lCode, 0, JOIN_DATE);
         ret := 1;
-	END IF;    
+	END IF;
 END;
 /
 
@@ -464,13 +464,13 @@ CREATE or REPLACE PROCEDURE update_customer_wallet_re
 	bId IN VARCHAR2,
     activityCode IN VARCHAR2,
 	pointsEarned IN VARCHAR2
-) 
+)
 AS
 DATE_OF_ACTIVITY DATE;
 BEGIN
 	SELECT CURRENT_DATE INTO DATE_OF_ACTIVITY FROM DUAL;
 	-- Insert into customer walletre table
-	INSERT INTO WALLETRE(CUSTOMERID, BID, ACTIVITYCODE, POINTSEARNED, DATEOFACTIVITY) VALUES(customerId, bId, activityCode, pointsEarned, DATE_OF_ACTIVITY);      
+	INSERT INTO WALLETRE(CUSTOMERID, BID, ACTIVITYCODE, POINTSEARNED, DATEOFACTIVITY) VALUES(customerId, bId, activityCode, pointsEarned, DATE_OF_ACTIVITY);
 END;
 /
 
@@ -481,13 +481,13 @@ CREATE or REPLACE PROCEDURE update_customer_wallet_rr
 	bId IN VARCHAR2,
     rewardCode IN VARCHAR2,
 	pointsRedeemed IN VARCHAR2
-) 
+)
 AS
 DATE_OF_ACTIVITY DATE;
 BEGIN
 	SELECT CURRENT_DATE INTO DATE_OF_ACTIVITY FROM DUAL;
 	-- Insert into customer walletre table
-	INSERT INTO WALLETRR(CUSTOMERID, BID, REWARDCODE, POINTSREEDEMED, DATEOFACTIVITY) VALUES(customerId, bId, rewardCode, pointsRedeemed, DATE_OF_ACTIVITY);      
+	INSERT INTO WALLETRR(CUSTOMERID, BID, REWARDCODE, POINTSREEDEMED, DATEOFACTIVITY) VALUES(customerId, bId, rewardCode, pointsRedeemed, DATE_OF_ACTIVITY);
 END;
 /
 
@@ -498,7 +498,7 @@ create or replace PROCEDURE add_re_rule
     acCode IN VARCHAR2,
     pts IN NUMBER,
     ret OUT INT
-) 
+)
 AS
 SAMERULECOUNT INT;
 ACTYPECOUNT INT;
@@ -508,13 +508,13 @@ BEGIN
 
     IF SAMERULECOUNT > 0 THEN
         ret := 0;
-    ELSIF ACTYPECOUNT = 0 THEN 
+    ELSIF ACTYPECOUNT = 0 THEN
         ret := 2;
     ELSE
         -- Insert into rerule table
         INSERT INTO RERULE(BRANDID, ACTIVITYCODE, POINTS, VERSIONNO) values (bId, acCode, pts, 1);
         ret := 1;
-    END IF;    
+    END IF;
 END;
 /
 
@@ -525,7 +525,7 @@ create or replace PROCEDURE update_re_rule
     acCode IN VARCHAR2,
     pts IN NUMBER,
     ret OUT INT
-) 
+)
 AS
 CURRVNO INT;
 BEGIN
@@ -537,7 +537,7 @@ BEGIN
         ret := 1;
     ELSE
         ret := 0;
-    END IF;    
+    END IF;
 END;
 /
 
@@ -548,7 +548,7 @@ create or replace PROCEDURE add_rr_rule
     reCode IN VARCHAR2,
     pts IN NUMBER,
     ret OUT INT
-) 
+)
 AS
 SAMERULECOUNT INT;
 RETYPECOUNT INT;
@@ -558,13 +558,13 @@ BEGIN
 
     IF SAMERULECOUNT > 0 THEN
         ret := 0;
-    ELSIF RETYPECOUNT = 0 THEN 
+    ELSIF RETYPECOUNT = 0 THEN
         ret := 2;
     ELSE
         -- Insert into rerule table
         INSERT INTO RRRULE(BRANDID, REWARDCODE, POINTS, VERSIONNO) values (bId, reCode, pts, 1);
         ret := 1;
-    END IF;    
+    END IF;
 END;
 /
 
@@ -575,7 +575,7 @@ create or replace PROCEDURE update_rr_rule
     reCode IN VARCHAR2,
     pts IN NUMBER,
     ret OUT INT
-) 
+)
 AS
 CURRVNO INT;
 BEGIN
@@ -587,7 +587,7 @@ BEGIN
         ret := 1;
     ELSE
         ret := 0;
-    END IF;    
+    END IF;
 END;
 /
 
@@ -598,7 +598,7 @@ create or replace PROCEDURE validate_loyalty_program
     lCode IN VARCHAR2,
     lpType IN VARCHAR2,
     ret OUT INT
-) 
+)
 AS
 RERULECOUNT INT;
 RRRULECOUNT INT;
@@ -606,11 +606,11 @@ TIERCOUNT INT;
 BEGIN
     SELECT COUNT(DISTINCT ACTIVITYCODE) INTO RERULECOUNT FROM RERULE WHERE BRANDID = bId;
     SELECT COUNT(DISTINCT REWARDCODE) INTO RRRULECOUNT FROM RRRULE WHERE BRANDID = bId;
-    
+
     IF lpType = 'T' THEN
         SELECT COUNT(DISTINCT TIERNAME) INTO TIERCOUNT FROM TIER WHERE LPCODE = lCode;
     END IF;
-    
+
     IF lpType = 'T' AND TIERCOUNT < 1 THEN
         ret := 0;
     ELSIF RERULECOUNT < 1 THEN
@@ -620,7 +620,7 @@ BEGIN
     ELSE
         UPDATE LOYALTYPROGRAM SET ISVALID = 1 WHERE BRANDID = bId;
         ret := 3;
-    END IF;    
+    END IF;
 END;
 /
 
@@ -632,7 +632,7 @@ create or replace PROCEDURE customer_add_purchase
     lCode IN VARCHAR2,
     acCode IN VARCHAR2,
     isGCUsed IN NUMBER
-) 
+)
 AS
 RulePoints NUMBER(10);
 LType VARCHAR2(1);
@@ -644,38 +644,38 @@ BEGIN
    SELECT CURRENT_DATE INTO TodayDate FROM DUAL;
     -- Insert into purchase table
     INSERT INTO PURCHASE(CUSTOMERID, BID, GCUSED) VALUES(custId, bId, isGCUsed);
-    
+
     IF isGCUsed = 1 THEN
         -- Make the gift card used
-        UPDATE WALLETRR SET USED = 1 
+        UPDATE WALLETRR SET USED = 1
         WHERE ser = (SELECT ser
         FROM WALLETRR
         WHERE CUSTOMERID = custId AND BID = bId AND USED = 0 AND ROWNUM = 1);
-        
+
         totalPoints := 0;
     ELSE
         -- Get points from RE rule
-        SELECT POINTS INTO RulePoints FROM RERULE where ACTIVITYCODE = acCode AND BRANDID = bId 
+        SELECT POINTS INTO RulePoints FROM RERULE where ACTIVITYCODE = acCode AND BRANDID = bId
            AND VERSIONNO = (SELECT MAX(VERSIONNO) FROM RERULE where ACTIVITYCODE = acCode AND BRANDID = bId);
         -- Get Tier Type
         SELECT LPTYPE INTO LType FROM LOYALTYPROGRAM WHERE LPCODE = lCode;
-        
+
         IF LType = 'T' THEN
            pointsMultiplier := get_points_multiplier(custId, lCode);
         ELSE
            pointsMultiplier := 1;
         END IF;
-        
+
         totalPoints := pointsMultiplier * RulePoints;
-     END IF;   
-    
+     END IF;
+
     -- Insert into WALLETRE table
-    INSERT INTO WALLETRE(CUSTOMERID, BID, ACTIVITYCODE, POINTSEARNED, DATEOFACTIVITY) 
+    INSERT INTO WALLETRE(CUSTOMERID, BID, ACTIVITYCODE, POINTSEARNED, DATEOFACTIVITY)
     VALUES(custId, bId, acCode, totalPoints, TodayDate);
-    
+
     -- Update ENROLLP table
-    UPDATE ENROLLP 
-    SET POINTSEARNED = POINTSEARNED + totalPoints 
+    UPDATE ENROLLP
+    SET POINTSEARNED = POINTSEARNED + totalPoints
     WHERE CUSTOMERID = custId AND LPCODE = lCode;
 END;
 /
@@ -688,7 +688,7 @@ create or replace PROCEDURE customer_add_review
     lCode IN VARCHAR2,
     acCode IN VARCHAR2,
     review_text IN VARCHAR2
-) 
+)
 AS
 RulePoints NUMBER(10);
 LType VARCHAR2(1);
@@ -700,28 +700,28 @@ BEGIN
    SELECT CURRENT_DATE INTO TodayDate FROM DUAL;
     -- Insert into review table
     INSERT INTO REVIEW(REVIEWTEXT, CUSTOMERID, BID) VALUES(review_text, custId, bId);
-    
+
     -- Get points from RE rule
-    SELECT POINTS INTO RulePoints FROM RERULE where ACTIVITYCODE = acCode AND BRANDID = bId 
+    SELECT POINTS INTO RulePoints FROM RERULE where ACTIVITYCODE = acCode AND BRANDID = bId
        AND VERSIONNO = (SELECT MAX(VERSIONNO) FROM RERULE where ACTIVITYCODE = acCode AND BRANDID = bId);
     -- Get Tier Type
     SELECT LPTYPE INTO LType FROM LOYALTYPROGRAM WHERE LPCODE = lCode;
-    
+
     IF LType = 'T' THEN
        pointsMultiplier := get_points_multiplier(custId, lCode);
     ELSE
        pointsMultiplier := 1;
     END IF;
-    
-    totalPoints := pointsMultiplier * RulePoints;  
-    
+
+    totalPoints := pointsMultiplier * RulePoints;
+
     -- Insert into WALLETRE table
-    INSERT INTO WALLETRE(CUSTOMERID, BID, ACTIVITYCODE, POINTSEARNED, DATEOFACTIVITY) 
+    INSERT INTO WALLETRE(CUSTOMERID, BID, ACTIVITYCODE, POINTSEARNED, DATEOFACTIVITY)
     VALUES(custId, bId, acCode, totalPoints, TodayDate);
-    
+
     -- Update ENROLLP table
-    UPDATE ENROLLP 
-    SET POINTSEARNED = POINTSEARNED + totalPoints 
+    UPDATE ENROLLP
+    SET POINTSEARNED = POINTSEARNED + totalPoints
     WHERE CUSTOMERID = custId AND LPCODE = lCode;
 END;
 /
@@ -733,7 +733,7 @@ create or replace PROCEDURE customer_refer_friend
     bId IN VARCHAR2,
     lCode IN VARCHAR2,
     acCode IN VARCHAR2
-) 
+)
 AS
 RulePoints NUMBER(10);
 LType VARCHAR2(1);
@@ -745,28 +745,28 @@ BEGIN
    SELECT CURRENT_DATE INTO TodayDate FROM DUAL;
     -- Insert into review table
     INSERT INTO REFERFRIEND(CUSTOMERID, BID) VALUES(custId, bId);
-    
+
     -- Get points from RE rule
-    SELECT POINTS INTO RulePoints FROM RERULE where ACTIVITYCODE = acCode AND BRANDID = bId 
+    SELECT POINTS INTO RulePoints FROM RERULE where ACTIVITYCODE = acCode AND BRANDID = bId
        AND VERSIONNO = (SELECT MAX(VERSIONNO) FROM RERULE where ACTIVITYCODE = acCode AND BRANDID = bId);
     -- Get Tier Type
     SELECT LPTYPE INTO LType FROM LOYALTYPROGRAM WHERE LPCODE = lCode;
-    
+
     IF LType = 'T' THEN
        pointsMultiplier := get_points_multiplier(custId, lCode);
     ELSE
        pointsMultiplier := 1;
     END IF;
-    
-    totalPoints := pointsMultiplier * RulePoints;  
-    
+
+    totalPoints := pointsMultiplier * RulePoints;
+
     -- Insert into WALLETRE table
-    INSERT INTO WALLETRE(CUSTOMERID, BID, ACTIVITYCODE, POINTSEARNED, DATEOFACTIVITY) 
+    INSERT INTO WALLETRE(CUSTOMERID, BID, ACTIVITYCODE, POINTSEARNED, DATEOFACTIVITY)
     VALUES(custId, bId, acCode, totalPoints, TodayDate);
-    
+
     -- Update ENROLLP table
-    UPDATE ENROLLP 
-    SET POINTSEARNED = POINTSEARNED + totalPoints 
+    UPDATE ENROLLP
+    SET POINTSEARNED = POINTSEARNED + totalPoints
     WHERE CUSTOMERID = custId AND LPCODE = lCode;
 END;
 /
