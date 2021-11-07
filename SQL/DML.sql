@@ -10,17 +10,12 @@ INSERT INTO USERS(USERID, PASSWORD, USERTYPE) VALUES('Brand02', '2345', 'B');
 INSERT INTO USERS(USERID, PASSWORD, USERTYPE) VALUES('Brand03', '7890', 'B');
 --select * from users;
 
--- Insert into admin table 
--- admin table not necessaty
---INSERT INTO ADMIN  VALUES('0001', 'Bob', 'Richard', '9876243233', null, '1901 Gromarn St, Raleigh, NC', 'admin');
-
-
 
 -- Insert into brand table
 INSERT INTO BRAND(BID, BNAME, ADDRESS, JOINDATE) VALUES ('Brand01', 'Brand X', '503 Rolling Creek Dr Austin, AR', '01-APR-2021');
 INSERT INTO BRAND(BID, BNAME, ADDRESS, JOINDATE) VALUES ('Brand02', 'Brand Y', '939 Orange Ave Coronado, CA', '25-MAR-2021');
 INSERT INTO BRAND(BID, BNAME, ADDRESS, JOINDATE) VALUES ('Brand03', 'Brand Z', '20 Roszel Rd Princeton, NJ', '08-MAY-2021');
-select * from brand;
+--select * from brand;
 
 -- Insert into activity type
 INSERT INTO ACTIVITYTYPE(ACTIVITYCODE, ACTIVITYNAME) VALUES ('A01', 'Purchase');

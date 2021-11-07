@@ -80,7 +80,7 @@ public class ShowQuery {
                 "ON E.CUSTOMERID = C.CUSTOMERID\n" +
                 "INNER JOIN LOYALTYPROGRAM L\n" +
                 "ON L.LPCODE = E.LPCODE\n" +
-                "WHERE L.BRANDID = 'Brand02');";
+                "WHERE L.BRANDID = 'Brand02')";
 
         ResultSet rs = null;
         try {

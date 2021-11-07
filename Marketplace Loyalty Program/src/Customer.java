@@ -1,7 +1,6 @@
-import java.sql.CallableStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +9,7 @@ import java.util.Scanner;
 
 /**
  * @author Md Mirajul Islam (mislam22)
+ * @author Setu Kumar Basak (sbasak4)
  */
 
 public class Customer {
@@ -98,30 +98,45 @@ public class Customer {
         }
     }
 
-
     public static void viewWallet() {
-        int selection;
+        int selection, count = 0;
         Scanner sc = new Scanner(System.in);
         boolean flag = false;
 
-        System.out.println("Here is your wallet: ");
-        String sql = "select CUSTOMERID, BID, ACTIVITYCODE, POINTSEARNED, REWARDCODE, POINTSREEDEMED from WALLETRE JOIN WALLETRR USING (CUSTOMERID) where CUSTOMERID='" + Login.loggedInUserId + "'";
+        String sqlCred = "SELECT BNAME, ACNAME, POINTS, DOA, ACTYPE FROM TABLE(show_wallet_info('" + Login.loggedInUserId + "'))";
 
         ResultSet rs = null;
         try {
-            rs = Home.statement.executeQuery(sql);
+            rs = Home.statement.executeQuery(sqlCred);
             while (rs.next()) {
-                System.out.println("CustomerId: " + rs.getString("CUSTOMERID") +
-                        "BrandId: " + rs.getString("BID") +
-                        "ActivityCode: " + rs.getString("ACTIVITYCODE") +
-                        "PointsEarned: " + rs.getString("POINTSEARNED") +
-                        "RewardCode: " + rs.getString("REWARDCODE") +
-                        "PointsRedeemed: " + rs.getString("POINTSREEDEMED"));
+                System.out.println("Brand Name: " + rs.getString("BNAME"));
+                String type = rs.getString("ACTYPE");
+
+                if (type.equalsIgnoreCase("E")) {
+                    System.out.println("Activity Name: " + rs.getString("ACNAME"));
+                    System.out.println("Points Earned: " + rs.getInt("POINTS"));
+                } else {
+                    System.out.println("Reward Name: " + rs.getString("ACNAME"));
+                    System.out.println("Points Redeemed: " + rs.getInt("POINTS"));
+                }
+
+                Date date = rs.getDate("DOA");
+                DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+                String dateStr = dateFormat.format(date);
+
+                System.out.println("Date of Activity: " + dateStr);
+                System.out.println();
+
+                count++;
+            }
+
+            if (count == 0) {
+                System.out.println("No Activity Found in the Wallet.");
             }
             rs.close();
         } catch (SQLException e) {
             Utility.close(rs);
-            e.printStackTrace();
+            System.out.println("Could not retrieve wallet information.");
         }
 
         do {
@@ -139,7 +154,7 @@ public class Customer {
                     flag = false;
                 }
             } catch (Exception e) {
-                System.out.println("Please choose between 1. Please choose again.");
+                System.out.println("Please choose 1 to go back. Please choose again.");
                 sc.next();
             }
         } while (!flag);

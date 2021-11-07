@@ -222,14 +222,16 @@ CREATE TABLE REFERFRIEND(
 
 ---------------------------------User Define Types--------------------------------------
 
-CREATE OR REPLACE TYPE customer_type as OBJECT (
-  CUSTID VARCHAR(50),
-  CUSTFNAME VARCHAR(50),
-  CUSTLNAME VARCHAR(50)
+CREATE OR REPLACE TYPE wallet_type as OBJECT (
+  BNAME VARCHAR2(80),
+  ACNAME VARCHAR2(50),
+  POINTS NUMBER(10),
+  DOA DATE,
+  ACTYPE VARCHAR2(1)
 );
 /
 
-CREATE OR REPLACE TYPE customer_table_type as TABLE OF customer_type;
+CREATE OR REPLACE TYPE wallet_table_type as TABLE OF wallet_type;
 /
 
 
@@ -286,21 +288,33 @@ BEGIN
 END;
 /
 
-
-CREATE OR REPLACE FUNCTION show_query_1
-  RETURN customer_table_type PIPELINED AS
+--- Show wallet information
+CREATE OR REPLACE FUNCTION show_wallet_info
+(
+    custId VARCHAR2
+)
+  RETURN wallet_table_type PIPELINED AS
 BEGIN
     FOR cur IN (
-            SELECT C.CUSTOMERID CID, C.FNAME CFNAME, C.LNAME CLNAME
-            FROM CUSTOMER C
-            INNER JOIN ENROLLP E
-            ON E.CUSTOMERID = C.CUSTOMERID
-            INNER JOIN LOYALTYPROGRAM L
-            ON L.LPCODE = E.LPCODE
-            WHERE L.BRANDID = 'Brand02'
+                    SELECT TEMP.BNAME, TEMP.ACNAME, TEMP.POINTS, TEMP.DATEOFACTIVITY DOA, TEMP.ACTYPE ACTYPE
+                    FROM
+                    (  
+                        SELECT B.BNAME, AT.ACTIVITYNAME ACNAME, WRE.POINTSEARNED AS POINTS, DATEOFACTIVITY, 'E' AS ACTYPE 
+                        FROM WALLETRE WRE INNER JOIN ACTIVITYTYPE AT ON WRE.ACTIVITYCODE= AT.ACTIVITYCODE
+                        INNER JOIN BRAND B ON B.BID = WRE.BID
+                        WHERE CUSTOMERID = custId
+                        
+                        UNION 
+                        
+                        SELECT B.BNAME, RT.REWARDNAME ACNAME, WRR.POINTSREEDEMED AS POINTS, DATEOFACTIVITY, 'R' AS ACTYPE  
+                        FROM WALLETRR WRR INNER JOIN REWARDTYPE RT ON WRR.REWARDCODE= RT.REWARDCODE
+                        INNER JOIN BRAND B ON B.BID = WRR.BID
+                        WHERE CUSTOMERID = custId
+                    ) TEMP
+                    ORDER BY TEMP.DATEOFACTIVITY
     )
     LOOP
-      PIPE ROW(customer_type(cur.CID, cur.CFNAME, cur.CLNAME));
+      PIPE ROW(wallet_type(cur.BNAME, cur.ACNAME, cur.POINTS, cur.DOA, cur.ACTYPE));
     END LOOP;
     RETURN;
 END;
