@@ -70,27 +70,32 @@ public class ShowQuery {
     }
 
     private static void query1() {
+        int count = 0;
         String sqlCred = "SELECT * FROM TABLE(show_query_1)";
 
         ResultSet rs = null;
         try {
             rs = Home.statement.executeQuery(sqlCred);
-            if (rs.next()) {
-                while (rs.next()) {
-                    System.out.println("Customer ID: " + rs.getString("CUSTID"));
-                    System.out.println("Customer First Name: " + rs.getString("CUSTFNAME"));
-                    System.out.println("Customer Last Name: " + rs.getString("CUSTLNAME"));
-                    System.out.println();
-                }
-            } else {
+            while (rs.next()) {
+                System.out.println("Customer ID: " + rs.getString("CUSTID"));
+                System.out.println("Customer First Name: " + rs.getString("CUSTFNAME"));
+                System.out.println("Customer Last Name: " + rs.getString("CUSTLNAME"));
+                System.out.println();
+                count++;
+            }
+
+            if (count == 0) {
                 System.out.println("No Customer Found.");
             }
 
             rs.close();
-        } catch (SQLException e) {
+        } catch (
+                SQLException e) {
             Utility.close(rs);
             e.printStackTrace();
         }
+
+        showQueryUI();
     }
 
     private static void query2() {

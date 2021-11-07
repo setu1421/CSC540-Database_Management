@@ -290,9 +290,17 @@ END;
 CREATE OR REPLACE FUNCTION show_query_1
   RETURN customer_table_type PIPELINED AS
 BEGIN
-    FOR cur IN (SELECT CUSTOMERID, FNAME, LNAME FROM CUSTOMER)
+    FOR cur IN (
+            SELECT C.CUSTOMERID CID, C.FNAME CFNAME, C.LNAME CLNAME
+            FROM CUSTOMER C
+            INNER JOIN ENROLLP E
+            ON E.CUSTOMERID = C.CUSTOMERID
+            INNER JOIN LOYALTYPROGRAM L
+            ON L.LPCODE = E.LPCODE
+            WHERE L.BRANDID = 'Brand02'
+    )
     LOOP
-      PIPE ROW(customer_type(cur.CUSTOMERID, cur.FNAME, cur.LNAME));
+      PIPE ROW(customer_type(cur.CID, cur.CFNAME, cur.CLNAME));
     END LOOP;
     RETURN;
 END;
