@@ -4,10 +4,15 @@ import java.sql.Types;
 import java.util.Scanner;
 
 /**
+ * Defines the functionality of signup
+ *
  * @author Setu Kumar Basak (sbasak4)
  */
 
 public class Signup {
+    /**
+     * Shows the signup menus
+     */
     public static void signUpUI() {
         Scanner sc = new Scanner(System.in);
         int selection;
@@ -46,6 +51,9 @@ public class Signup {
         } while (!flag);
     }
 
+    /**
+     * Defines the functionality of signing up brand
+     */
     public static void addBrand() {
         String brandUserId, brandPassword, brandName, brandAddress;
 
@@ -92,6 +100,15 @@ public class Signup {
         }
     }
 
+    /**
+     * Validates the brand information
+     *
+     * @param brandUserId   Brand user id
+     * @param brandPassword Brand password
+     * @param brandName     Brand name
+     * @param brandAddress  Brand address
+     * @return Returns true if the brand information is valid otherwise false
+     */
     private static boolean validateBrand(String brandUserId, String brandPassword, String brandName, String brandAddress) {
         boolean isValid = true;
 
@@ -118,6 +135,9 @@ public class Signup {
         return isValid;
     }
 
+    /**
+     * Defines the functionality of signing up customer
+     */
     public static void addCustomer() {
         String customerUserId, customerPassword, customerFName, customerLName, customerAddress, customerPhone;
 
@@ -170,6 +190,17 @@ public class Signup {
         }
     }
 
+    /**
+     * Validates the customer information
+     *
+     * @param customerUserId   Customer user id
+     * @param customerPassword Customer password
+     * @param customerFName    Customer first name
+     * @param customerLName    Customer last name
+     * @param customerAddress  Customer address
+     * @param customerPhone    Customer phone
+     * @return Returns true if customer information is valid otherwise false
+     */
     private static boolean validateCustomer(String customerUserId, String customerPassword, String customerFName, String customerLName, String customerAddress, String customerPhone) {
         boolean isValid = true;
 

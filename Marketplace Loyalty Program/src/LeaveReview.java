@@ -5,12 +5,21 @@ import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 /**
+ * Defines the functionality of Leave Review
+ *
  * @author Md Mirajul Islam (mislam22)
  * @author Setu Kumar Basak (sbasak4)
  */
 
 public class LeaveReview {
 
+    /**
+     * Defines the leave review menus and saves the review
+     *
+     * @param brandId      The Brand ID related to the review
+     * @param lpCode       The loyalty program related to the review
+     * @param activityCode The activity code
+     */
     public static void leaveReviewUI(String brandId, String lpCode, String activityCode) {
         Scanner sc = new Scanner(System.in);
         boolean flag = false;

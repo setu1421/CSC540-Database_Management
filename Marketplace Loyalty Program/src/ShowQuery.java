@@ -16,10 +16,10 @@ public class ShowQuery {
 
         do {
             System.out.println("Choose what operation you want to perform");
-            System.out.println("1. List all customers that are not part of Brand02’s program.");
+            System.out.println("1. List all customers that are not part of Brand02 program.");
             System.out.println("2. List customers that have joined a loyalty program but have not participated in any activity in that program.");
             System.out.println("3. List the rewards that are part of Brand01 loyalty program.");
-            System.out.println("4. List all the loyalty programs that include “refer a friend” as an activity in at least one of their reward rules.");
+            System.out.println("4. List all the loyalty programs that include refer a friend as an activity in at least one of their reward rules.");
             System.out.println("5. For Brand01, list for each activity type in their loyalty program, the number instances that have occurred.");
             System.out.println("6. List customers of Brand01 that have redeemed at least twice.");
             System.out.println("7. All brands where total number of points redeemed overall is less than 500 points");

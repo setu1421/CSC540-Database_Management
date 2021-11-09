@@ -2,10 +2,17 @@ import java.sql.*;
 import java.util.Scanner;
 
 /**
+ * Defines the functionality of reward redeeming rules
+ *
  * @author Setu Kumar Basak (sbasak4)
  */
 
 public class RRRules {
+    /**
+     * Shows the reward redeeming rules
+     *
+     * @param add Defines whether to add or update rules
+     */
     public static void rrRulesUI(boolean add) {
         Scanner sc = new Scanner(System.in);
         boolean flag = false;
@@ -38,6 +45,13 @@ public class RRRules {
         } while (!flag);
     }
 
+    /**
+     * Validates the reward redeeming rule
+     *
+     * @param reCategory Reward category
+     * @param points     The no of points of the category
+     * @return Returns whether the reward rule is valid or not
+     */
     private static boolean validateRRRule(String reCategory, int points) {
         boolean isValid = true;
 
@@ -54,6 +68,12 @@ public class RRRules {
         return isValid;
     }
 
+    /**
+     * Add the reward redeeming rule
+     *
+     * @param reCategory The reward category
+     * @param points     No. of points of the rule
+     */
     private static void saveRRRULE(String reCategory, int points) {
         CallableStatement statement = null;
         try {
@@ -83,6 +103,12 @@ public class RRRules {
         }
     }
 
+    /**
+     * Updated the reward rule
+     *
+     * @param reCategory The reward category
+     * @param points     No. of points of the rule
+     */
     private static void updateRRRULE(String reCategory, int points) {
         CallableStatement statement = null;
         try {

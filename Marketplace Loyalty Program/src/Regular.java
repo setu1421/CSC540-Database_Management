@@ -1,10 +1,15 @@
 import java.util.Scanner;
 
 /**
+ * Defines the dashboard of Regular program
+ *
  * @author Setu Kumar Basak (sbasak4)
  */
 
 public class Regular {
+    /**
+     * Shows the regular loyalty program menus
+     */
     public static void regularUI() {
         Scanner sc = new Scanner(System.in);
         int selection;

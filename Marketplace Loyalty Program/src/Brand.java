@@ -5,6 +5,8 @@ import java.sql.Types;
 import java.util.Scanner;
 
 /**
+ * Shows the brand dashboard menus and the related functionalities
+ *
  * @author Setu Kumar Basak (sbasak4)
  */
 
@@ -12,6 +14,9 @@ public class Brand {
     public static boolean isAlreadyEnrolled = false, isActive = false;
     public static String lpType = "R", lpCode = "";
 
+    /**
+     * Shows the brand menus
+     */
     public static void brandUI() {
         intialize();
 
@@ -82,6 +87,9 @@ public class Brand {
         } while (!flag);
     }
 
+    /**
+     * Validates the loyalty program information which is to be added in marketplace
+     */
     private static void validateLoyaltyProgram() {
         CallableStatement statement = null;
         try {
@@ -114,6 +122,9 @@ public class Brand {
         }
     }
 
+    /**
+     * Checks if brand is already enrolled or not in a loyalty program
+     */
     private static void intialize() {
         String sql = "select LPCODE, LPTYPE, ISVALID from LOYALTYPROGRAM where BRANDID =  '" + Login.loggedInUserId + "'";
 

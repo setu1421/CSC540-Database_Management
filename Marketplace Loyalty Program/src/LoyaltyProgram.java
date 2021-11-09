@@ -5,12 +5,17 @@ import java.sql.Types;
 import java.util.Scanner;
 
 /**
+ * Defines the loyalty program dashboard functionalities
+ *
  * @author Setu Kumar Basak (sbasak4)
  */
 
 public class LoyaltyProgram {
     public static String lpName = "", lpCode = "", lpType = "";
 
+    /**
+     * Shows the loyalty program dashboard menus
+     */
     public static void loyaltyProgramUI() {
         Scanner sc = new Scanner(System.in);
 
@@ -70,6 +75,11 @@ public class LoyaltyProgram {
         } while (!flag);
     }
 
+    /**
+     * Checks if brand has already enrolled into a loyalty program or not
+     *
+     * @return Returns true if brand has already enrolled in a loyalty program otherwise false
+     */
     private static boolean checkIfBrandAlreadyEnrolled() {
         boolean alreadyEnrolled = false;
 
@@ -94,6 +104,12 @@ public class LoyaltyProgram {
         return alreadyEnrolled;
     }
 
+    /**
+     * Defines the functionality of adding the loyalty program
+     *
+     * @param lpName Loyalty Program name
+     * @param lpType Loyalty Program type
+     */
     private static void saveLoyaltyProgram(String lpName, String lpType) {
         CallableStatement statement = null;
         try {

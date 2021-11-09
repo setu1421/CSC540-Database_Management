@@ -2,10 +2,17 @@ import java.sql.*;
 import java.util.Scanner;
 
 /**
+ * Defines the functionality of Reward Earning rules
+ *
  * @author Setu Kumar Basak (sbasak4)
  */
 
 public class RERULES {
+    /**
+     * Shows the reward earning rules menu
+     *
+     * @param add Defines whether to update or add rule
+     */
     public static void reRulesUI(boolean add) {
         Scanner sc = new Scanner(System.in);
         boolean flag = false;
@@ -38,6 +45,12 @@ public class RERULES {
         } while (!flag);
     }
 
+    /**
+     * Adds the reward earning rule
+     *
+     * @param acCategory The activity category code
+     * @param points     The no. of points for the rule
+     */
     private static void saveRERULE(String acCategory, int points) {
         CallableStatement statement = null;
         try {
@@ -67,6 +80,12 @@ public class RERULES {
         }
     }
 
+    /**
+     * Adds the reward earning rule
+     *
+     * @param acCategory The activity category code of the rule
+     * @param points     The no of points of the rule
+     */
     private static void updateRERULE(String acCategory, int points) {
         CallableStatement statement = null;
         try {

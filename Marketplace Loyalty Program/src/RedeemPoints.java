@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
+ * Defines the functionality of redeeming points
+ *
  * @author Md Mirajul Islam (mislam22)
  * @author Setu Kumar Basak (sbasak4)
  */
@@ -14,6 +16,9 @@ public class RedeemPoints {
     public static ArrayList<String> availableRewardNames = new ArrayList<>();
     public static int rewardPoints = 0;
 
+    /**
+     * Shows redeem points menus
+     */
     public static void redeemPointsUI() {
         getAvailableBrands();
         Scanner sc = new Scanner(System.in);
@@ -90,6 +95,14 @@ public class RedeemPoints {
         } while (!flag);
     }
 
+    /**
+     * Defines the functionality of redeem activity
+     *
+     * @param brandId    The brand id of redeem activity
+     * @param lpCode     The loyalty program code of redeem activity
+     * @param rewardCode The reward code of redeem activity
+     * @param rewardQty  The reward quantity of the reward activity
+     */
     private static void doRedeemActivity(String brandId, String lpCode, String rewardCode, int rewardQty) {
         CallableStatement statement = null;
         try {
@@ -119,6 +132,9 @@ public class RedeemPoints {
         }
     }
 
+    /**
+     * Defines the functionality to retrieve available brands
+     */
     public static void getAvailableBrands() {
         availableBrandIds.clear();
 
@@ -168,6 +184,12 @@ public class RedeemPoints {
         }
     }
 
+    /**
+     * Defines the functionality of retrieving reward points
+     *
+     * @param brandId The brand Id
+     * @return Returns the customer reward points of the specified brand
+     */
     private static int getRewardPoints(String brandId) {
         int rewardPoints = 0;
         CallableStatement statement = null;

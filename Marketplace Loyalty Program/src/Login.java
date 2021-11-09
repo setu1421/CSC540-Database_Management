@@ -3,12 +3,17 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 /**
+ * Defines the functionality of Login Screen
+ *
  * @author Setu Kumar Basak (sbasak4)
  */
 
 public class Login {
     public static String loggedInUserId, loggedInUserType;
 
+    /**
+     * Shows the login menus
+     */
     public static void loginUI() {
         Scanner sc = new Scanner(System.in);
         boolean loginSuccessful = false;
@@ -39,6 +44,13 @@ public class Login {
         }
     }
 
+    /**
+     * Validates the login information
+     *
+     * @param userid   User ID to validate
+     * @param password Password to validate
+     * @return Returns true if the credentials are valid else false
+     */
     private static boolean validateLogin(String userid, String password) {
         boolean isValid = true;
 
@@ -55,6 +67,13 @@ public class Login {
         return isValid;
     }
 
+    /**
+     * Checks the user id and password
+     *
+     * @param userid   User ID to check for login
+     * @param password Password to check for login
+     * @return Returns true if credentials are valid otherwise false
+     */
     private static boolean checkUserIdAndPassword(String userid, String password) {
         boolean loginSuccessful = false;
 

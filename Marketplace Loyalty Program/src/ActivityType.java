@@ -4,10 +4,15 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Scanner;
 
 /**
+ * Shows the Activity Type menus and add activity types for brand
+ *
  * @author Setu Kumar Basak (sbasak4)
  */
 
 public class ActivityType {
+    /**
+     * Shows the menu for activity type UI
+     */
     public static void activityTypeUI() {
         Scanner sc = new Scanner(System.in);
         int selection;
@@ -49,6 +54,11 @@ public class ActivityType {
         } while (!flag);
     }
 
+    /**
+     * Adds activity type for brand
+     *
+     * @param activityCode the activity code to be added
+     */
     private static void addActivityType(String activityCode) {
         String sql = "Insert into BRANDACTIVITYTYPE(BRANDID, ACTIVITYCODE) values (?,?)";
         try {
@@ -69,6 +79,9 @@ public class ActivityType {
         }
     }
 
+    /**
+     * Return to regular or tier loyalty program dashboard
+     */
     private static void activityGoBack() {
         if (LoyaltyProgram.lpType.equalsIgnoreCase("R")) {
             Regular.regularUI();

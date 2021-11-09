@@ -4,10 +4,15 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Scanner;
 
 /**
+ * Defines the functionality of tier program
+ *
  * @author Setu Kumar Basak (sbasak4)
  */
 
 public class Tier {
+    /**
+     * Shows the tier menu
+     */
     public static void tierUI() {
         Scanner sc = new Scanner(System.in);
         int selection;
@@ -50,6 +55,9 @@ public class Tier {
         } while (!flag);
     }
 
+    /**
+     * Defines the functionality of tier setup
+     */
     private static void tierSetup() {
         boolean tierCountOk = false;
         Scanner sc = new Scanner(System.in);
@@ -111,6 +119,14 @@ public class Tier {
         }
     }
 
+    /**
+     * Add the tiers in the loyalty program
+     *
+     * @param tierNames       Tier names
+     * @param tierPoints      Tier points
+     * @param tierMultipliers Tier multipliers
+     * @param tiersCount      No. of tiers
+     */
     private static void saveTiers(String[] tierNames, int[] tierPoints, int[] tierMultipliers, int tiersCount) {
         try {
             for (int i = 0; i < tiersCount; i++) {
@@ -133,6 +149,15 @@ public class Tier {
         }
     }
 
+    /**
+     * Validates the tier programs
+     *
+     * @param tierNames       Tier names
+     * @param tierPoints      Tier points
+     * @param tierMultipliers Tier multipliers
+     * @param tiersCount      No. of tiers
+     * @return Returns true if the tier information is valid otherwise false
+     */
     private static boolean validateTierInput(String[] tierNames, int[] tierPoints, int[] tierMultipliers, int tiersCount) {
         boolean isValid = true;
         for (int i = 0; i < tiersCount; i++) {

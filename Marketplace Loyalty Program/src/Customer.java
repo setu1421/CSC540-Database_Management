@@ -8,6 +8,8 @@ import java.util.Locale;
 import java.util.Scanner;
 
 /**
+ * Shows the customer dashboard and the customer functionalities
+ *
  * @author Md Mirajul Islam (mislam22)
  * @author Setu Kumar Basak (sbasak4)
  */
@@ -18,6 +20,9 @@ public class Customer {
     public static ArrayList<String> enrolledLPCodes = new ArrayList<String>();
     public static ArrayList<String> availableLPCodes = new ArrayList<String>();
 
+    /**
+     * Shows the customer dashboard menus
+     */
     public static void customerUI() {
         initialize();
         Scanner sc = new Scanner(System.in);
@@ -63,6 +68,9 @@ public class Customer {
         } while (!flag);
     }
 
+    /**
+     * Enrolls customer into a brand loyalty program
+     */
     public static void enrollLoyaltyProgram() {
         if (availableLPCodes.size() == 0) {
             System.out.println("No Loyalty Program is available to enroll.");
@@ -98,6 +106,9 @@ public class Customer {
         }
     }
 
+    /**
+     * Shows the customer wallet information
+     */
     public static void viewWallet() {
         int selection, count = 0;
         Scanner sc = new Scanner(System.in);
@@ -160,6 +171,9 @@ public class Customer {
         } while (!flag);
     }
 
+    /**
+     * Initialize the loyalty programs customer has already enrolled
+     */
     private static void initialize() {
         allLPCodes.clear();
         enrolledLPCodes.clear();
@@ -202,6 +216,11 @@ public class Customer {
         availableLPCodes = allLPCodes;
     }
 
+    /**
+     * Function for customer enrolling into loyalty program
+     *
+     * @param lpCode The loyalty program code customer will enroll
+     */
     private static void saveLoyaltyProgram(String lpCode) {
         CallableStatement statement = null;
         try {

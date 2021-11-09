@@ -2,11 +2,20 @@ import java.sql.*;
 import java.util.Scanner;
 
 /**
+ * Defines the functionality of referring a friend
+ *
  * @author Md Mirajul Islam (mislam22)
  * @author Setu Kumar Basak (sbasak4)
  */
 
 public class ReferFriend {
+    /**
+     * Shows refer a friend menus
+     *
+     * @param brandId      The brand id of the referral activity
+     * @param lpCode       The loyalty program of the referral activity
+     * @param activityCode The activity code of the referral activity
+     */
     public static void referFriendUI(String brandId, String lpCode, String activityCode) {
         Scanner sc = new Scanner(System.in);
 

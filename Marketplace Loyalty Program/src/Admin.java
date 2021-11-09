@@ -3,10 +3,15 @@ import java.sql.Date;
 import java.util.*;
 
 /**
+ * Shows the admin dashboard menus and related functionalities
+ *
  * @author Setu Kumar Basak (sbasak4)
  */
 
 public class Admin {
+    /**
+     * Shows the admin menus
+     */
     public static void adminUI() {
         Scanner sc = new Scanner(System.in);
         int selection;
@@ -61,6 +66,9 @@ public class Admin {
         } while (!flag);
     }
 
+    /**
+     * Take customer user id as input and shows the customer info
+     */
     public static void showCustomerInfo() {
         String customerUserId;
         int selection;
@@ -103,6 +111,9 @@ public class Admin {
         } while (selection != 2);
     }
 
+    /**
+     * Take brand user id as input and shows the brand info
+     */
     public static void showBrandInfo() {
         String brandUserId;
         int selection;
@@ -143,6 +154,9 @@ public class Admin {
         } while (selection != 2);
     }
 
+    /**
+     * Take brand information and adds the brand in the marketplace
+     */
     public static void addBrand() {
         String brandUserId, brandName, brandAddress;
 
@@ -187,6 +201,9 @@ public class Admin {
         }
     }
 
+    /**
+     * Validates the brand information
+     */
     private static boolean validateBrand(String brandUserId, String brandName, String brandAddress) {
         boolean isValid = true;
 
@@ -208,6 +225,9 @@ public class Admin {
         return isValid;
     }
 
+    /**
+     * Take customer information and adds the customer in the marketplace
+     */
     public static void addCustomer() {
         String customerUserId, customerFName, customerLName, customerAddress, customerPhone;
 
@@ -258,6 +278,9 @@ public class Admin {
         }
     }
 
+    /**
+     * Validates the customer information
+     */
     private static boolean validateCustomer(String customerUserId, String customerFName, String customerLName, String customerAddress, String customerPhone) {
         boolean isValid = true;
 
@@ -289,6 +312,9 @@ public class Admin {
         return isValid;
     }
 
+    /**
+     * Take activity type information and adds the activity type in the marketplace
+     */
     public static void addActivityType() {
         String activityName, activityCode;
         int selection;
@@ -328,6 +354,9 @@ public class Admin {
         } while (selection != 2);
     }
 
+    /**
+     * Validates the activity type information
+     */
     private static boolean validateActivityType(String activityName, String activityCode) {
         boolean isValid = true;
 
@@ -344,6 +373,9 @@ public class Admin {
         return isValid;
     }
 
+    /**
+     * Take reward type information and adds the reward type in the marketplace
+     */
     public static void addRewardType() {
         String rewardName, rewardCode;
         int selection;
@@ -383,6 +415,9 @@ public class Admin {
         } while (selection != 2);
     }
 
+    /**
+     * Validates the reward type information
+     */
     private static boolean validateRewardType(String rewardName, String rewardCode) {
         boolean isValid = true;
 
@@ -399,6 +434,9 @@ public class Admin {
         return isValid;
     }
 
+    /**
+     * Logs out admin and shows the home dashboard
+     */
     public static void adminLogout() {
         Home.showMenu();
     }

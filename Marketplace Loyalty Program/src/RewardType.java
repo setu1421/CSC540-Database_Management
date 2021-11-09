@@ -4,10 +4,15 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Scanner;
 
 /**
+ * Defines the functionality of reward type
+ *
  * @author Setu Kumar Basak (sbasak4)
  */
 
 public class RewardType {
+    /**
+     * Shows the reward type menus
+     */
     public static void rewardTypeUI() {
         Scanner sc = new Scanner(System.in);
         int selection;
@@ -48,6 +53,12 @@ public class RewardType {
         } while (!flag);
     }
 
+    /**
+     * Adds the reward type
+     *
+     * @param rewardCode The reward code
+     * @param quantity   The reward quantity
+     */
     private static void addRewardType(String rewardCode, int quantity) {
         String sql = "Insert into BRANDREWARDTYPE(BRANDID, REWARDCODE, TOTQUANTITY, CURQUANTITY) values (?,?,?,?)";
         try {
@@ -70,6 +81,9 @@ public class RewardType {
         }
     }
 
+    /**
+     * Defines the functionality of reward go back
+     */
     private static void rewardGoBack() {
         if (LoyaltyProgram.lpType.equalsIgnoreCase("R")) {
             Regular.regularUI();

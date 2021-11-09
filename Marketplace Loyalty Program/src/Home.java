@@ -7,13 +7,13 @@ import java.util.*;
 
 public class Home {
 
-    //public static final String jdbcURL = "jdbc:oracle:thin:@ora.csc.ncsu.edu:1521:orcl01";
+    public static final String jdbcURL = "jdbc:oracle:thin:@ora.csc.ncsu.edu:1521:orcl01";
     //public static final String user = "sbasak4";
     //public static final String passwd = "abcd1234";
 
-    public static final String jdbcURL = "jdbc:oracle:thin:@localhost:1521:orcl";
-    public static final String user = "c##scott";
-    public static final String passwd = "tiger";
+    //public static final String jdbcURL = "jdbc:oracle:thin:@localhost:1521:orcl";
+    //public static final String user = "c##scott";
+    //public static final String passwd = "tiger";
 
     public static Connection connection = null;
     public static Statement statement = null;
@@ -26,12 +26,19 @@ public class Home {
             // driver available to clients.
 
             Class.forName("oracle.jdbc.OracleDriver");
+            Scanner sc = new Scanner(System.in);
 
             try {
 
+                // Take the input of database credentials from user
+                System.out.println("Enter database credentials:");
+                System.out.print("Enter username:");
+                String user = sc.nextLine();
+                System.out.print("Enter password:");
+                String passwd = sc.nextLine();
+
                 // Get a connection from the first driver in the
                 // DriverManager list that recognizes the URL jdbcURL
-
                 connection = DriverManager.getConnection(jdbcURL, user, passwd);
                 statement = connection.createStatement();
 
@@ -46,6 +53,10 @@ public class Home {
             oops.printStackTrace();
         }
     }
+
+    /**
+     * Shows the menu for home dashboard
+     */
 
     public static void showMenu() {
         Scanner sc = new Scanner(System.in);
@@ -86,6 +97,9 @@ public class Home {
         } while (selection != 4);
     }
 
+    /**
+     * Closes the open connections and exit the program
+     */
     public static void exitProgram() {
         Utility.close(connection);
         Utility.close(statement);

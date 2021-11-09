@@ -2,12 +2,21 @@ import java.sql.*;
 import java.util.Scanner;
 
 /**
+ * Defines the functionality of purchase
+ *
  * @author Md Mirajul Islam (mislam22)
  * @author Setu Kumar Basak (sbasak4)
  */
 
 public class Purchase {
 
+    /**
+     * Shows the purchase dashboard menus
+     *
+     * @param brandId      The brand id with which the purchase will be occurred
+     * @param lpCode       The loyalty program associated with tye purchase
+     * @param activityCode The activity code of the purchase
+     */
     public static void purchaseUI(String brandId, String lpCode, String activityCode) {
         int giftCardCount = getGiftCardCount(brandId);
         int isGCUsed = 0;
@@ -65,6 +74,12 @@ public class Purchase {
         }
     }
 
+    /**
+     * Defines the functionality for getting the gift card count of a brand
+     *
+     * @param brandId The brand Id
+     * @return Returns the gift card count of the specified brand
+     */
     private static int getGiftCardCount(String brandId) {
         int giftCardCount = 0;
 

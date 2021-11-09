@@ -8,6 +8,8 @@ import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 /**
+ * Defines the functionality of reward activity
+ *
  * @author Md Mirajul Islam (mislam22)
  * @author Setu Kumar Basak (sbasak4)
  */
@@ -20,7 +22,9 @@ public class RewardActivity {
     public static ArrayList<String> joinedLPCodes = new ArrayList<String>();
     public static ArrayList<String> lpActivityTypes = new ArrayList<>();
 
-
+    /**
+     * Shows the reward activity menus
+     */
     public static void rewardActivityUI() {
         getJoinedLoyaltyPrograms();
 
@@ -95,6 +99,9 @@ public class RewardActivity {
 
     }
 
+    /**
+     * Defines the functionality of retrieving joined loyalty programs
+     */
     public static void getJoinedLoyaltyPrograms() {
         joinedLPCodes.clear();
         lpCodeNameMap.clear();
@@ -128,6 +135,11 @@ public class RewardActivity {
         }
     }
 
+    /**
+     * Retrieves the activity types related to the specific loyalty program
+     *
+     * @param lpCode The loyalty program code
+     */
     public static void getLPActivityTypes(String lpCode) {
         lpActivityTypes.clear();
         lpActivityCodeNameMap.clear();
